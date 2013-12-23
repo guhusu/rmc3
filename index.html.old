@@ -1,0 +1,412 @@
+<!-- !DOCTYPE html-->
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<!-- html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <!-- meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>Apache Cordova</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+                <p class=""><a href="main.html">main</a></p>
+            </div>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+        </script>
+    </body>
+</html-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height, initial-scale=1.0">
+<title>RMC</title>
+<link href="css/rmc2.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/jquery.touchswipe.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/iscroll.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/jquery.pep.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/rmc2.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/pushmsg.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+$(function(){
+	/*$('#dragv').pep({
+		  axis: 'x'
+	});*/
+	/*$('#vvssdd').pep({
+		constrainTo:'parent'
+	});*/
+	//$('#vvball').pep({constrainTo:'parent'});
+	///alert($('#ind').outerHeight(true));
+});
+
+RMC.add_evnet('show','main','setv');
+function setv()
+{
+	/*$('#dragv').pep({
+		//constrainTo:[RMC.SW, false, RMC._SH, false],
+		  //constrainTo: 'window',//[RMC.SW, false, RMC._SH, false],
+		  constrainTo:'parent',
+		  //constrainTo:'#main',
+		  //axis: 'x',
+		  //useCSSTranslation: false 
+	});	*/
+	//var h=$('#main .header').outerHeight(true);
+	//var h2=$('#main .content').outerHeight(true);
+	//alert(RMC._SH+' -- '+h+' -- '+h2);
+	//$('#main .content').css('height','500px');
+}
+RMC.add_evnet('hidebefore','main','unsetv');
+function unsetv()
+{
+	 $.pep.unbind( $('#dragv') );
+}
+</script>
+<style>
+.ccbg {
+	color:#fff;
+	background:#c00;
+}
+.cleans {
+	width:100%;
+	padding:0px;
+	margin:0px;
+	hiehgt:0px;
+	font-size:0px;
+	clear:both;
+}
+  /* Begin Navigation Bar Styling */
+   #nav {
+      width: 100%;
+      float: left;
+      margin: 5px 0 0 0;
+      padding: 0;
+      list-style: none;
+      background-color: #f2f2f2;
+      border-bottom: 1px solid #ccc; 
+      border-top: 1px solid #ccc; }
+   #nav li {
+      float: left; width:20%;
+      }
+   #nav li a {
+      display: block;
+      padding: 8px 15px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #069;
+      border-right: 1px solid #ccc; 
+       white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+      }
+   #nav li a:hover {
+      color: #c00;
+      background-color: #fff; }
+      
+      
+      
+.radio-ball {
+	
+}    
+
+
+select {
+	width:100%;
+	text-align:center;
+	display:block;
+	height:30px;
+	padding:5px 30px;
+	color:#fff;
+	background: rgb(122,188,255); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(122,188,255,1) 0%, rgba(96,171,248,1) 44%, rgba(64,150,238,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(122,188,255,1)), color-stop(44%,rgba(96,171,248,1)), color-stop(100%,rgba(64,150,238,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(122,188,255,1) 0%,rgba(96,171,248,1) 44%,rgba(64,150,238,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(122,188,255,1) 0%,rgba(96,171,248,1) 44%,rgba(64,150,238,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(122,188,255,1) 0%,rgba(96,171,248,1) 44%,rgba(64,150,238,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(122,188,255,1) 0%,rgba(96,171,248,1) 44%,rgba(64,150,238,1) 100%); /* W3C */
+	box-shadow:inset 0px 0px 5px #4096ee;
+}
+select:after {
+	content:'$';
+	width:30px;
+	height:30px;
+	background:#ff0;
+}
+
+.rtext {
+	display:block;
+    width:200px;
+	height:30px;
+	line-height:30px;
+	margin:0px;
+	padding:5px 10px;
+	
+	-webkit-border-radius:30px;
+	border-width:1px;
+	border-style:solid;
+	border-color:#cccccc;
+	/*overflow: hidden;
+	position: static;*/
+	background: rgb(204,212,0); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(204,212,0,1) 0%, rgba(179,184,0,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(204,212,0,1)), color-stop(100%,rgba(179,184,0,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(204,212,0,1) 0%,rgba(179,184,0,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(204,212,0,1) 0%,rgba(179,184,0,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(204,212,0,1) 0%,rgba(179,184,0,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(204,212,0,1) 0%,rgba(179,184,0,1) 100%); /* W3C */
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.8),
+		inset 0px 0px 3px rgba(224,224,224,1);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.8),
+		inset 0px 0px 3px rgba(224,224,224,1);
+}
+
+.range {
+	display:block;
+	width:200px;
+	height:30px;
+	border:#ccc solid 1px;
+	margin-left:30px;
+	vertical-align:middle;
+}
+.range .bar {
+	display:block;
+	width:100%;
+	height:5px;
+	background: rgb(204,212,0); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(204,212,0,1) 0%, rgba(179,184,0,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(204,212,0,1)), color-stop(100%,rgba(179,184,0,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(204,212,0,1) 0%,rgba(179,184,0,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(204,212,0,1) 0%,rgba(179,184,0,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(204,212,0,1) 0%,rgba(179,184,0,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(204,212,0,1) 0%,rgba(179,184,0,1) 100%); /* W3C */
+}
+.range .moveball {
+	
+	width:30px;
+	height:30px;
+	background: rgb(64,150,238); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(64,150,238,1) 0%, rgba(64,150,238,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(64,150,238,1)), color-stop(100%,rgba(64,150,238,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(64,150,238,1) 0%,rgba(64,150,238,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(64,150,238,1) 0%,rgba(64,150,238,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(64,150,238,1) 0%,rgba(64,150,238,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(64,150,238,1) 0%,rgba(64,150,238,1) 100%); /* W3C */
+	border-radius:30px;
+}
+</style>
+</head>
+<body>
+<div class="page" id="ind">
+<div class="header">測試主頁</div>
+<div class="content ccbg">
+<p>
+<span id="pushmsgcount"></span>
+</p>
+<span class="btn" tap="RMC.changepage('main');">main</span>
+<p>
+<a href="main.html">main.html</a>
+</p>
+<p>
+<a href="pep1.html">pep1.html</a>
+</p>
+<span class="range"><span class="moveball" id="vvball"></span><span class="bar"></span></span>
+<p>
+<a href="pep2.html">pep2.html</a>
+</p>
+
+<p>
+<a href="pep3.html">pep3.html</a>
+</p>
+
+<p>
+	<span class="switch"><label for="xx"></label><input type="checkbox" id="xx" value="1"  /><span class="ball"></span></span>
+</p>
+<p>
+	<span class="switch"><label for="pp"></label><input type="checkbox" id="pp" value="1"  /><span class="ball"></span></span>
+</p>
+<p>
+<span class="radio">
+<input type="radio" value="1" id="ra1" name="ra" /><label for="ra1">一</label><input type="radio" value="2" id="ra2" name="ra" /><label for="ra2">二</label><input type="radio" value="3" id="ra3" name="ra" /><label for="ra3">三</label><input type="radio" value="4" id="ra4" name="ra" /><label for="ra4">四</label>
+</span>
+<span class="radio-list">
+<input type="radio" id="rr1" name="rr">
+<label for="rr1"><span class="sel"></span><span class="name">測試一</span></label>
+<input type="radio" id="rr2" name="rr">
+<label for="rr2"><span class="sel"></span><span class="name">測試二</span></label>
+<input type="radio" id="rr3" name="rr">
+<label for="rr3"><span class="sel"></span><span class="name">測試三</span></label>
+</span>
+
+<select id="vv33">
+<option value="">dsdfasdf</option>
+<option value="">dsdfasdf2</option>
+<option value="">dsdfasdf3</option>
+<option value="">dsdfasdf4</option>
+<option value="">dsdfasdf5</option>
+</select>
+
+
+</p>
+<p>
+<input type="text" class="rtext" value="" />
+</p>
+
+<p>
+<input type="text" class="rtext" value="" />
+</p>
+
+<p>
+<input type="text" class="rtext" value="" />
+</p>
+
+<p>
+<input type="text" class="rtext" value="" />
+</p>
+
+
+<label style="width:200px;background:#ff0;display:inline-block;border-radius:15px;-webkit-box-shadow: 0px 0px 5px #4096ee;" for="xxx"><input type="text" id="xxx"  style="display:inline-block;width:100%;height:30px;line-height:30px;padding:5px 10px;border:#ccc solid 0px;margin:0px;background:transparent;" value="" /></label>
+</div>
+</div>
+<div class="page" id="main">
+<div class="header nav">主頁
+<ul id="nav">
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Our Productsadfsdfee</a></li>
+      <li><a href="#">FAQs</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Login</a></li>
+   </ul>
+   <div class="clear"></div>
+</div>
+<div class="content ccbg">
+
+這是內容
+<p>
+<a onclick="RMC.changepage('t')">t.html</a>
+</p>
+<p>
+<a onclick="RMC.changepage('qq')">qq.html</a>
+</p>
+<p>
+<a onclick="RMC.backpage()">返回</a>
+</p>
+
+<!-- div style="border:#f00 solid 1px;height:150px;width:100%;">
+<div style="width:50px;height:50px;background:#ccc;" id="vvssdd">拖</div>
+</div>
+
+<div style="width:50px;height:50px;background:#ccc;" id="dragv">拖2</div-->
+<div style="border:#f00 solid 1px;height:600px;width:300px;">
+
+</div>
+
+
+<div>
+asdasdf
+</div>
+
+<span class="btn" tap="RMC.changepage('t');">t.html</span>
+<div class="listview">
+<li><img src="images/qqd.jpg" class="l-img" /></li>
+<li>adfadsf</li>
+<li>adfadsf</li>
+<li>to upload_page</li>
+</div>
+<ul class="listview">
+<li><a href="" class="button">Delete</a>
+	<a href="" class="button lime delete">Delete</a>
+	<a href="" class="button save">Save</a>
+	<a href="" class="button arrow">Arrow</a></li>
+<li>adfadsf</li>
+<li>adfadsf</li>
+<li><span class="list delete">adfadsf</span></li>
+<li><span class="btn" id="hash">測試hash </span></li>
+</ul>
+</div>
+</div>
+<div class="page" id="t">
+<div class="header"><span class="l-btn icon-home" tap="RMC.backpage();">返回</span><span class="r-btn icon-home-r" tap="RMC.backpage();">返回</span><span class="header-nameb">第二頁</span>
+<div class="cleans"></div>
+<ul class="nav-5">
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Our Productsadfsdfee</a></li>
+      <li><a href="#">FAQs</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Login</a></li>
+   </ul>
+</div>
+<div class="content ccbg">
+這是內容sss
+<p>
+<a onclick="RMC.changepage('main')">main.html</a>
+</p>
+<p>
+<a onclick="RMC.changepage('qq')">qq.html</a>
+</p>
+<p>
+<a onclick="RMC.backpage()">返回</a>
+</p>
+</div>
+<div class="footer">測試</div>
+</div>
+<div class="page" id="qq">
+<div class="header" >第三頁</div>
+<div class="content ccbg">
+這是內容adfasdfasdfasdf
+<p>
+<a onclick="RMC.changepage('t')">t.html</a>
+</p>
+<p>
+<a onclick="RMC.changepage('main')">main.html</a>
+</p>
+<p>
+<a onclick="RMC.backpage()">返回</a>
+</p>
+</div>
+<div class="footer nav"><ul class="navb-5">
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Our Productsadfsdfee</a></li>
+      <li><a href="#">FAQs</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Login</a></li>
+   </ul><div class="clear"></div></div>
+</div>
+<div class="page" id="pushmsg">
+<div class="header">訊息通知</div>
+<div class="content" id="pushmsgcc">
+<ul id="pushmsgul"></ul>
+</div>
+</div>
+</body>
+</html>
