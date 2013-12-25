@@ -6,6 +6,11 @@
  * description:開發對於cordoav執行的framework
  * 更新紀錄:
  * */
+String.prototype.ReplaceAll = function (AFindText,ARepText)
+{
+  raRegExp = new RegExp(AFindText,"g");
+  return this.replace(raRegExp,ARepText);
+};
 var RMC={
 		_SH:0,//視窗寬度
 		_SW:0,//視窗高度
@@ -26,7 +31,7 @@ var RMC={
 			var i=0;
 			var hash=window.location.hash;
 			//設定overlay
-			$('#pageoverlay').css({'z-index':'99','display':'none'});
+			$('#pageoverlay').css({position:'absolute','z-index':'99','display':'none',width:RMC._SW+'px',height:RMC._SH+'px','overflow':'hidden'});
 			//設定page
 			$('.page').each(function(){
 				var CH=RMC._SH;
@@ -93,8 +98,10 @@ var RMC={
 			});
 			
 			//設定down-list
-			var mar=RMC._SH-160;
-			$('.down-list').css({'padding-top':mar+'px'});
+			//var mar=RMC._SH-200;
+			//$('.down-list').css({'padding-top':mar+'px'});
+			//mar=RMC._SW-10;
+			//$('.down-list .sel').css('width',mar+'px');
 			
 			RMC.runCordova();
 			//專換上方位置
@@ -104,6 +111,10 @@ var RMC={
 			});
 		},
 		changePage:function(id){RMC.changepage(id);},
+		//初始頁說定
+		initload:function(){
+			
+		},
 		changepage:function(id){
 			if(!RMC._RUNING){
 				RMC._RUNING=true;
@@ -189,6 +200,80 @@ var RMC={
 					}
 				}
 			}
+		},
+		//載入html
+		loadPage:function(file){RMC.loadpage(file);},
+		loadpage:function(file){
+			//alert($());
+			$.get(file,function(data){
+				//alert(data);
+				data=data.ReplaceAll('class="page"','class="page-load"');
+				$('body').append(data);
+				RMC.pageset();
+			},'text');
+		},
+		//執行page設定
+		pageset:function(){
+			var HP=false;//header position
+			var FP=false;//footer position
+			$('.page-load').each(function(){
+				var CH=RMC._SH;
+				var chf=false;
+				$(this).css({'width':RMC._SW+'px','height':RMC._SH+'px','overflow':'hidden'});
+				var content=$(this).find('.content');
+				var header=$(this).find('.header');
+				var footer=$(this).find('.footer');
+				if(header){
+					HP=$(header).outerHeight(true);
+					CH -=HP;
+					chf=true;
+				}
+				if(footer.length>0){
+					FP=footer.outerHeight(true);
+					CH -=FP;
+					sFP=RMC._SH-FP;
+					chf=true;
+				}
+				if(chf){
+					if(!content){
+						header.after('<div class="content" style="height:'+CH+'px;overflow:auto;"></div>');
+					}else{
+						content.css({'height':CH+'px','overflow':'auto'});
+					}
+				}else{
+					//上下頁面時使用
+					if(!content){
+						header.after('<div class="content" style="height:'+CH+'px;overflow:auto;"></div>');
+					}else{
+						content.css({'height':CH+'px','overflow':'auto'});
+					}
+				}
+				
+				//設定事件
+				$('#'+this.id+' [tap]').each(function(){
+					$(this).swipe( {
+			            tap:function(event, target) {
+			            	eval($(this).attr('tap'));
+			            },
+			            threshold:50
+			          });
+				});
+				
+				//設定down-list
+				//var mar=RMC._SH-200;
+				//$('#'+this.id+' .down-list').css({'padding-top':mar+'px'});
+				//mar=RMC._SW-10;
+				//$('.down-list .con').css('width',mar+'px');
+				//$('.down-list .sel').css('width',RMC._SW+'px');
+
+				//專換上方位置
+				var ww=this._SW-146;
+				$('#'+this.id+' .header-nameb').each(function(){
+					$(this).css('width',ww+'px');
+				});
+				
+				$(this).attr('class','page display-none');
+			});
 		},
 		//swipe event
 		swipe:function(name,type,fn){

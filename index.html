@@ -13,25 +13,271 @@
 <script type="text/javascript" charset="utf-8" src="js/rmc3.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/pushmsg.js"></script>
 <script type="text/javascript" charset="utf-8">
-$(function(){
-	$('#dragv').pep({
-		constrainTo:'parent'
-	});
-	$("#newbr").swipe( { swipeStatus:swipe2, allowPageScroll:"vertical"} );
+RMC.init(function(){
 	
-	//var myScroll = new iScroll('newbr', { hScrollbar: false, vScrollbar: true });
 });
+RMC.add_evnet('show','main6','tt');	
+function tt()
+{
+	//console('ttt'); 
+	//document.getElementById('newbr').scrollTop=270;
+	alert(document.getElementById('newbr').scrollTop);
+	//return false;
+}
+$(function(){
+	//$('#dragv').pep({
+	//	constrainTo:        'parent', 
+    //    shouldEase:         false
+	//});
+	
+	
+	  //document.getElementById('main6').addEventListener("touchmove",qqq,false);
+	//$("#newbr").swipe( { swipeStatus:swipe2, allowPageScroll:"vertical"} );
+	//document.getElementById('newbr').scrollTop=270;
+	//var myScroll = new iScroll('newbr', { hScrollbar: false, vScrollbar: true });
+	
+	//document.getElementById('barball').addEventListener("touchstart",todrag,false);
+	//document.getElementById('barball').addEventListener("touchstart",todrags,false);
+	document.getElementById('barball').addEventListener("touchmove",todragm,false);
+	//document.getElementById('barball').addEventListener("touchend",todrage,false);
+	document.getElementById('barballqq').addEventListener("touchmove",todragmqq,false);
+	
+	$('#barswipe').swipe({swipeStatus:barswipe, allowPageScroll:"vertical"});
+	var newbrtop=0;
+	var br2=-1;
+	var timers;
+	$('#newbr2').swipe({
+		swipeStatus:function(event, phase, direction, distance, duration)
+        {
+			//$('#pageoverlay').css('display','');
+			//alert('ccc');
+		  //timers=setTimeout('checkaerea()',200);
+          var str = "";
+          if (phase=="move") {
+            //str="You have moved " + distance +" pixels, past 200 and the handler will fire <br/>";
+            //str+="You have moved for " + duration +" ms, If you go over 5000 the swipe will cancel <br/>";
+            //str+="If you leave the swipe object, and have made the distance, the swipe will end <br/>";
+            //str+="If you leave the swipe object, and have NOT made the distance, the swipe will cancel ";
+            str=distance+' -- '+duration+' -- '+$('#newbr2').scrollTop();
+           // alert($('#newbar2').scrollTop());
+          }
+          
+          if (phase=="end") {
+            str='end'+' -- '+$('#newbr2').scrollTop();;
+        	//str="Handler fired, you met the thresholds:<br/>";
+            //str+=distance+"px (over 500px required) <br/>";                
+            //str+=duration+"ms (under 5000ms required) <br/>"; 
+            
+          }
+          if (phase=="cancel") {
+            str="You didn't meet the thresholds, cancel was fired:<br/>";
+            //str+=distance+"px (over 500px required) <br/>";                
+            //str+=duration+"ms (under 5000ms required) <br/>";  
+          }
+          
+          $('#vvveeee').html(str);
+          
+        },
+        triggerOnTouchEnd : true,        
+        //triggerOnTouchEnd:false,
+        //triggerOnTouchLeave:true,
+        allowPageScroll:'vertical',
+        //allowPageScroll:'horizontal',
+        //maxTimeThreshold:5000,
+        threshold:75
+	});
+	// Get a reference to our touch-sensitive element
+	  var touchzone = document.getElementById("newbr");
+	  // Add an event handler for the touchstart event
+	  //touchzone.addEventListener("touchend", touchHandler, false);
+	  touchzone.addEventListener("touchstart",sw,false);
+	  touchzone.addEventListener("touchmove",sw2,false);
+	  touchzone.addEventListener("touchend",sw3,false);
+	  touchzone.addEventListener("scroll",sw4,false);
+	  var bttimer=setInterval('gscroll()',200);
+});
+var bt=-1
+var bttimer;
+function gscroll()
+{
+	var v=document.getElementById('newbr').scrollTop;
+	if(v!=bt){
+		bt=v;
+	}else{
+		
+	}
+}
+function sw(e)
+{
+	//var v=$('#newbr').scrollTop();
+	var v=document.getElementById('newbr').scrollTop;
+	$('#downvv').html('start - scrolltop='+v);
+	//alert('c');
+	//document.getElementById('downvv').innerHTML='點擊';	
+	//document.getElementById('downvv').innerHTML=e.target.scrollTop;
+	bttimer=setTimeout('gscroll',200);
+}
+function sw2(e){
+	//var v=$('#newbr').scrollTop();
+	var v=document.getElementById('newbr').scrollTop;
+	$('#downvv2').html('move - scrolltop='+v);
+}
+function sw3(e){
+	//var v=$('#newbr').scrollTop();
+	var v=document.getElementById('newbr').scrollTop;
+	$('#downvv3').html('end - scrolltop='+v);
+}
+function sw4(e){
+	//var v=$('#newbr').scrollTop();
+	var v=document.getElementById('newbr').scrollTop;
+	$('#downvv4').html('scroll - scrolltop='+v);
+}
+function checkaerea()
+{
+	//var $('')
+	/*if(br2!=){
+		
+	}else{
+		 timers=setTimeout('checkaerea()',200);
+	}*/
+}
+var barpadding=0;
+function barswipe(event, phase, direction, distance){
+	$('#barswipediv').html('event='+event.id+' phase='+phase+' direction='+direction+' distance='+distance);
+	
+	if(phase=="move"){
+		if(direction=='left'){
+			var mar=barpadding-distance;
+			$(event.target).css('margin-left',mar+'px');
+		}else if(direction=='right'){
+			var mar=barpadding+distance;
+			$(event.target).css('margin-left',mar+'px');
+		}
+	}
+	
+	if(phase=='end'){
+		barpadding=parseInt($(event.target).css('margin-left'));
+	}
+	/*if( phase=="move" && (direction=="left" || direction=="right") )
+	{
+		//var duration=0;
+		
+		//if (direction == "left")
+			//scrollImages((IMG_WIDTH * currentImg) + distance, duration);
+		
+		//else if (direction == "right")
+			//scrollImages((IMG_WIDTH * currentImg) - distance, duration);
+		
+	}
+	else if ( phase == "cancel")
+	{
+		//scrollImages(IMG_WIDTH * currentImg, speed);
+	}
+	else if ( phase =="end" )
+	{
+		//if (direction == "right")
+		//	previousImage()
+		//else if (direction == "left")			
+		//	nextImage()
+	}*/
+}
+function todragmqq(e){
+	//e.pageX;
+	//alert('ccc');
+	
+	$(e.target).css('margin-left',e.changedTouches[0].clientX+'px');
+	$('#barhtmlqq').html(e.changedTouches[0].clientX+' '+e.changedTouches[0].screenX+' '+e.changedTouches[0].pageX+' '+e.pageX+'  '+$('#barcon').offset().left);
+}
+function todrags(e){
+	//e.target.style.background='#ff0';
+	//e.target.style.position='#ff0';
+	//$(e.target).css('position','relative');
+	//$(e.target).css('background','#ff0');
+	//alert(e.changedTouches[0].clientX+' '+e.changedTouches[0].screenX+' '+e.changedTouches[0].pageX+' '+pageX);
+}
+function todragm(e){
+	//e.pageX;
+	//alert('ccc');
+	//alert(e.changedTouches[0].clientX);
+	$(e.target).css('left',e.changedTouches[0].clientX+'px');
+	$('#barhtml').html(e.changedTouches[0].clientX+' '+e.changedTouches[0].screenX+' '+e.changedTouches[0].pageX+' '+e.pageX+'  '+$('#barcon').offset().left);
+}
+function todrage(e){
+	//$(e.target).css('position','');
+	//$(e.target).css('background','#f00');
+}
+function todrag(e){
+	/*alert('touchstart');
+	for(var k in e){
+		
+		alert(k+'='+e[k]);
+	}
+	alert(e.changedTouches);
+	e.targetTouches
+	e.touches
+	e.pageY;
+	e.pageX;
+	e.layerY
+	e.layerX;*/
+	//
+	//currentTarget
+	//type
+	alert(e.pageX+' -- '+e.pageY);
+	for(var i in e.changedTouches[0]){
+		alert(i+'='+e.changedTouches[0][i]);//pageX,screenX,clientX
+	}
+	/*for(var i in e.target){
+		alert(i+'='+e.target[i]);
+	}
+	for(var j in e.target['properties']){
+		alert(j+'='+e.target['properties'][j]);
+	}*/
+	var orig = e.originalEvent;
+	alert(orig.changedTouches[0].pageY);
+}
+function qqq(e)
+{
+	//alert('move');	
+}
+var scroll_top=-1;
+function touchHandler(e)
+{//alert('c');
+	//chval();//alert(e.target.id);	
+	//setTimeout('calstop()',200);
+	//calstop();
+}
+function calstop(){
+	var v=document.getElementById('newbr').scrollTop;$('#downvv').html('scrolltop='+v);
+	if(scroll_top==v){
+		chval();
+	}else {
+		scroll_top=v;
+		setTimeout('calstop()',200);
+	}
+}
 function chval()
 {
-	var v=$('.bar').scrollTop();
-	var c=Math.round(v/40);
-	c=c*40;
+	///var v=$('.bar').scrollTop();//$('#downvv').html('scrolltop='+v);
+	//var c=Math.round(v/30);
+	//c=c*30;
+	//document.getElementById('newbr').scrollTop=c;
+	
+	var bar=document.getElementById('newbr');
+	var c=Math.round(bar.scrollTop/30);
+	c=c*30; 
+	bar.scrollTop=c;
+	
 	//alert(c);
 	//$('.bar').anon
-	$('.bar').animate({scrollTop:c},200);
-	
+	/*$('#newbr').animate({scrollTop:c},1000,function(){
+		//$('.bar').scrollTop(c);//alert($('.bar').scrollTop());
+		//document.getElementById('newbr').scrollTop=c;
+		//$('#downvv4').html('scrolltop='+$('.bar').scrollTop()+' -- '+c);
+	});
+	$('#downvv2').html('scrolltop='+c);
+	$('#downvv3').html('scrolltop='+$('.bar').scrollTop());*/
 	//$('.bar').scrollTop(c);
-	
+	//alert('c');
 		
 	
 	
@@ -41,9 +287,10 @@ function chval()
 function swipe2(event, phase, direction, distance){
 	$('#qva').html( phase +" you have swiped " + distance + "px in direction:" + direction);
 	if(phase=='end'){
-		setTimeout(function(){
-		chval();
-		},500);
+		//chval();
+		//setTimeout(function(){
+		//chval();
+		//},1000);
 	}
 }
 /*$('#newbr').bind('touchmove', function(e) { 
@@ -63,7 +310,12 @@ function swipe2(event, phase, direction, distance){
 <div class="content" style="background:url(img/logo.png);-webkit-background-size:cover;   -moz-background-size:cover;   -o-background-size:cover;   background-size:cover">
 adfadf<br>
 adfadfad<br>
-adfadfad<br>
+<a href="pep1.html">pep1.html</a>
+
+<a href="pep2.html">pep2.html</a>adfadfad<br>
+<a href="hann1.html">hann1.html</a>adfadfad<br>
+<a href="swipe.html">swipe.html</a>adfadfad<br>
+<a href="swipe2.html">swipe2.html</a>adfadfad<br>
 adfadfad<br>
 adfadfad<br>
 adfadfad<br>
@@ -88,6 +340,13 @@ adfadf<br>
 <a href="javascript:RMC.changepage('main5');">數量拉霸</a><br> 
 <br>
 <a href="javascript:RMC.changepage('main6');">選單</a><br> 
+<br>
+<br>
+<a href="javascript:RMC.changepage('main8');">選單2</a><br> 
+<br>
+<br>
+<a href="javascript:RMC.loadpage('other.html');">載入頁面</a><br> 
+<a href="javascript:RMC.changepage('main7');">到載入頁面</a>
 <p>
 <span class="radio">
 <input type="radio" value="1" id="ra1" name="ra" /><label for="ra1">一</label><input type="radio" value="2" id="ra2" name="ra" /><label for="ra2">二</label><input type="radio" value="3" id="ra3" name="ra" /><label for="ra3">三</label><input type="radio" value="4" id="ra4" name="ra" /><label for="ra4">四</label>
@@ -176,7 +435,22 @@ adfae
 adfasd
 asdfasd
 fasdfasd
+<div id="barhtml" style="color:#fff;">99999</div>
 <div style="position:relative;height:30px;"><span style="display:block;height:10px;background: -webkit-linear-gradient(top, rgba(255,214,94,1) 0%,rgba(254,191,4,1) 100%);"></span></div>
+
+<div style="width:300px;height:300px;border:#ccc solid 1px;margin-left:5px;padding-left:5px;position:relative; " id="barcon">
+<div style="width:50px;height:50px;background:#f00;position:absolute;z-index:10" id="barball" ></div>
+</div>
+<div id="barhtmlqq" style="color:#fff;">99999</div>
+<div style="width:300px;height:300px;border:#ccc solid 1px;margin-left:5px;padding-left:5px; " id="barconqq">
+<div style="width:50px;height:50px;background:#f00;" id="barballqq" draggable="true"></div>
+</div>
+
+<div id="barswipediv"></div>
+<div style="width:300px;height:300px;border:#ccc solid 1px;">
+<div style="width:50px;height:50px;background:#f00;" id="barswipe" ></div>
+</div>
+
 </div>
 </div>
 <div class="page" id="main6">
@@ -187,6 +461,10 @@ dasdfasdfasdf
 adfasdf
 asdfadf
 adfefef<br>
+<div id="downvv" style="color:#fff;">downvv</div>
+<div id="downvv2" style="color:#fff;">downvv2</div>
+<div id="downvv3" style="color:#fff;">downvv3</div>
+<div id="downvv4" style="color:#fff;">downvv4</div>
 adfefef<br>
 adfefef<br>
 adfefef<br>
@@ -197,6 +475,21 @@ adfefef<br>
 adfefef<br>
 <a href="javascript:void(0);">xafesijefe</a>
 adfefef<br>
+
+adfefef<br>
+adfefef<br>
+
+adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>adfefef<br>
+adfefef<br>
 adfefef<br>
 adfefef<br>
 adfefef<br>
@@ -205,16 +498,96 @@ adfefef<br>
 adfefef<br>
 <div id="qva"></div>
 <div class="down-list"><div class="hd"><span class="btn"><a href="javascript:chval();">確定</a></span></div>
+<span class="sel"></span>
+<div class="con">
 <div class="bar" id="newbr" style="width:100%">
 <span class="val">&nbsp;</span>
-<span class="val">一</span>
-<span class="val">二</span>
-<span class="val">三</span>
-<span class="val">四</span>
-<span class="val">五</span>
+<span class="val">&nbsp;</span>
+<span class="val">1</span>
+<span class="val">2</span>
+<span class="val">3</span>
+<span class="val">4</span>
+<span class="val">5</span>
+<span class="val">6</span>
+<span class="val">7</span>
+<span class="val">8</span>
+<span class="val">9</span>
+<span class="val">10</span>
+<span class="val">11</span>
+<span class="val">12</span>
+<span class="val">13</span>
+<span class="val">14</span>
+<span class="val">15</span>
+<span class="val">16</span>
+<span class="val">17</span>
+<span class="val">18</span>
+<span class="val">19</span>
+<span class="val">&nbsp;</span>
 <span class="val">&nbsp;</span>
 </div>
-<span class="sel"></span></div>
+
+</div>
+</div>
+</div>
+</div>
+<div class="page" id="main8">
+<div class="header">選單</div>
+<div class="content" style="background:#106382;">asdfasdf
+
+adfefef<br>
+<div id="vvveeee"></div>
+
+adfefef<br>
+adfefef<br>
+
+adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>
+adfefef<br>
+<div id="qva"></div>
+<div class="down-list"><div class="hd"><span class="btn"><a href="javascript:chval();">確定</a></span></div>
+<div class="con">
+<div class="bar" id="newbr2" style="width:100%">
+<span class="val">&nbsp;</span>
+<span class="val">&nbsp;</span>
+<span class="val">1</span>
+<span class="val">2</span>
+<span class="val">3</span>
+<span class="val">4</span>
+<span class="val">5</span>
+<span class="val">6</span>
+<span class="val">7</span>
+<span class="val">8</span>
+<span class="val">9</span>
+<span class="val">10</span>
+<span class="val">11</span>
+<span class="val">12</span>
+<span class="val">13</span>
+<span class="val">14</span>
+<span class="val">15</span>
+<span class="val">16</span>
+<span class="val">17</span>
+<span class="val">18</span>
+<span class="val">19</span>
+<span class="val">&nbsp;</span>
+<span class="val">&nbsp;</span>
+</div>
+<span class="sel"></span>
+</div>
+</div>
 </div>
 </div>
 </body>
