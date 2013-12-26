@@ -16,7 +16,7 @@
 RMC.init(function(){
 	
 });
-RMC.add_evnet('show','main6','tt');	
+RMC.add_event('show','main6','tt');	
 function tt()
 {
 	//console('ttt'); 
@@ -96,19 +96,21 @@ $(function(){
 	  touchzone.addEventListener("scroll",sw4,false);
 	  var bttimer=setInterval('gscroll()',200);
 });
-var bt=-1
+var down_list_bt={mm:-1};
 var bttimer;
+
 function gscroll()
 {
 	var v=document.getElementById('newbr').scrollTop;
-	if(v!=bt){
-		bt=v;
+	document.getElementById('downvv5').innerHTML=v;
+	if(v!=down_list_bt.mm){
+		down_list_bt.mm=v;
 	}else{
 		
 	}
 }
 function sw(e)
-{
+{//salert('c');
 	//var v=$('#newbr').scrollTop();
 	var v=document.getElementById('newbr').scrollTop;
 	$('#downvv').html('start - scrolltop='+v);
@@ -465,6 +467,7 @@ adfefef<br>
 <div id="downvv2" style="color:#fff;">downvv2</div>
 <div id="downvv3" style="color:#fff;">downvv3</div>
 <div id="downvv4" style="color:#fff;">downvv4</div>
+<div id="downvv5" style="color:#fff;">downvv4</div>
 adfefef<br>
 adfefef<br>
 adfefef<br>

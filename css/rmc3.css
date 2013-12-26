@@ -84,7 +84,7 @@ background: linear-gradient(to bottom,  #45484d 0%,#000000 100%); /* W3C */
 	/*height:100%;*/
 	/*overflow:hidden;*/
 	/*background:#fff;*/
-	-webkit-overflow-scrolling: touch;
+	/*-webkit-overflow-scrolling: touch;*/
 }
 .footer {
 	width:100%;

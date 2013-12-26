@@ -321,7 +321,7 @@ var RMC={
 			
 		},
 		//加入事件
-		add_evnet:function(type,id,fun){
+		add_event:function(type,id,fun){
 			this._PAGE_EVENT[type][id]=fun;
 		},
 		on:function(id,type,fun){
