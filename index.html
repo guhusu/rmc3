@@ -16,6 +16,32 @@
 RMC.init(function(){
 	
 });
+RMC.add_event('show','main10','scc3');
+function scc3()
+{
+	//if(myScroll4==undefined || myScroll4==null){
+		myScroll4 = new IScroll('#vsdf', { eventPassthrough: true, scrollX: true, scrollY: false, preventDefault: false });	
+	//}
+}
+RMC.add_event('show','main9','scc');
+RMC.add_event('hide','main9','scc2');
+function updatePosition()
+{
+	 document.getElementById('syy').innerHTML=this.y;
+	 alert(myScroll.y);
+}
+function scc()
+{
+	//myScroll = new IScroll('#wrapper', { mouseWheel: true ,snap: true});
+	//myScroll.on('scrollEnd', updatePosition);
+}
+function scc2()
+{
+	if(myScroll!=null){
+		myScroll.destroy();
+		myScroll = null;	//alert(myScroll);
+	}
+}
 RMC.add_event('show','main6','tt');	
 function tt()
 {
@@ -96,17 +122,23 @@ $(function(){
 	  touchzone.addEventListener("scroll",sw4,false);
 	  var bttimer=setInterval('gscroll()',200);
 });
-var down_list_bt={mm:-1};
+var down_list_bt={mm:-1,};
 var bttimer;
+var xi=0;
 
 function gscroll()
 {
+	++xi;
+	if(xi>10000) xi=0;
 	var v=document.getElementById('newbr').scrollTop;
-	document.getElementById('downvv5').innerHTML=v;
+	document.getElementById('downvv5').innerHTML=v+ ' -- '+xi;
 	if(v!=down_list_bt.mm){
 		down_list_bt.mm=v;
 	}else{
-		
+		var bar=document.getElementById('newbr');
+		var c=Math.round(bar.scrollTop/30);
+		c=c*30; 
+		bar.scrollTop=c;
 	}
 }
 function sw(e)
@@ -345,6 +377,14 @@ adfadf<br>
 <br>
 <br>
 <a href="javascript:RMC.changepage('main8');">選單2</a><br> 
+<br>
+
+<br>
+<a href="javascript:RMC.changepage('main9');">選單3</a><br> 
+<br>
+
+<br>
+<a href="javascript:RMC.changepage('main10');">iscroll 頁面</a><br> 
 <br>
 <br>
 <a href="javascript:RMC.loadpage('other.html');">載入頁面</a><br> 
@@ -591,6 +631,329 @@ adfefef<br>
 <span class="sel"></span>
 </div>
 </div>
+</div>
+</div>
+
+
+<div class="page" id="main9">
+<div class="header">選單3</div>
+<div class="content" style="background:#106382;">asdfasdf
+
+
+<script>
+$(function(){
+	/*myScroll = new IScroll('#rxscroll', {
+		scrollX: true,
+		scrollY: true,
+		momentum: false,
+		snap: true
+	});*/
+	//myScroll = new IScroll('#wrapper', { mouseWheel: true });
+});
+
+function showselect()
+{
+	$('#mys').css('display','block');
+	myScroll = new IScroll('#wrapper', { mouseWheel: true ,snap: true});
+	myScroll2 = new IScroll('#wrop', {snap: true});
+}
+function getvals()
+{
+	alert(myScroll.y + ' -- ' +myScroll2.y);
+	$('#mys').css('display','none');
+}
+function stv()
+{
+	
+	
+}
+</script>
+<style>
+
+
+#wrapperccccc {
+	/*position: relative;
+	z-index: 1;
+	bottom:0px;*/
+	position:relative;
+	float:right;
+	width: 50%;
+	height:150px;
+	background: #ccc;
+	overflow: hidden;
+}
+.down-list .two-left{
+	position:relative;
+	float:left;
+	width: 50%;
+	height:150px;
+	background: #ccc;
+	overflow: hidden;
+}
+
+
+#vsdf {
+	position: relative;
+	z-index: 1;
+	height: 160px;
+	width: 100%;
+	background: #ccc;
+	overflow: hidden;
+	-ms-touch-action: none;
+}
+
+#scroller {
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 2400px;
+	height: 160px;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+
+#scroller ul {
+	list-style: none;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+#scroller li {
+	width: 120px;
+	height: 160px;
+	float: left;
+	line-height: 160px;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	background-color: #fafafa;
+	font-size: 14px;
+	overflow: hidden;
+	text-align: center;
+}
+
+
+</style>
+<div class="down-list" id="mys"><div class="hd"><span class="btn"><a href="javascript:getvals();">確定</a></span></div>
+<div class="sel"></div>
+<div id="wrop" class="bar p50">
+	<div class="scroller">
+		<ul>
+			<li>Pretty row 14</li>
+			<li>Pretty row 27</li>
+			<li>Pretty row 3s</li>
+			<li>Pretty row 4s</li>
+			<li>Pretty row e5</li>
+			<li>Pretty row s6</li>
+			<li>Pretty row 7</li>
+			<li>Pretty row 8</li>
+			<li>Pretty row 9</li>
+			<li>Pretty row 10</li>
+			<li>Pretty row 11</li>
+			<li>Pretty row 12</li>
+			<li>Pretty row 13</li>
+			<li>Pretty row 14</li>
+			<li>Pretty row 15</li>
+			<li>Pretty row 16</li>
+			<li>Pretty row 17</li>
+			<li>Pretty row 18</li>
+			<li>Pretty row 19</li>
+			<li>Pretty row 20</li>
+			<li>Pretty row 21</li>
+			<li>Pretty row 22</li>
+			<li>Pretty row 23</li>
+			<li>Pretty row 24</li>
+			<li>Pretty row 25</li>
+			<li>Pretty row 26</li>
+			<li>Pretty row 27</li>
+			<li>Pretty row 28</li>
+			<li>Pretty row 29</li>
+			<li>Pretty row 30</li>
+			<li>Pretty row 31</li>
+			<li>Pretty row 32</li>
+			<li>Pretty row 33</li>
+			<li>Pretty row 34</li>
+			<li>Pretty row 35</li>
+			<li>Pretty row 36</li>
+			<li>Pretty row 37</li>
+			<li>Pretty row 38</li>
+			<li>Pretty row 39</li>
+			<li>Pretty row 40</li>
+			<li>Pretty row 41</li>
+			<li>Pretty row 42</li>
+			<li>Pretty row 43</li>
+			<li>Pretty row 44</li>
+			<li>Pretty row 45</li>
+			<li>Pretty row 46</li>
+			<li>Pretty row 47</li>
+			<li>Pretty row 48</li>
+			<li>Pretty row 49</li>
+			<li>Pretty row 50</li>
+		</ul>
+	</div>
+</div>
+<div id="wrapper" class="bar p50">
+	<div class="scroller">
+		<ul>
+			<li>Pretty row 1</li>
+			<li>Pretty row 2</li>
+			<li>Pretty row 3</li>
+			<li>Pretty row 4</li>
+			<li>Pretty row 5</li>
+			<li>Pretty row 6</li>
+			<li>Pretty row 7</li>
+			<li>Pretty row 8</li>
+			<li>Pretty row 9</li>
+			<li>Pretty row 10</li>
+			<li>Pretty row 11</li>
+			<li>Pretty row 12</li>
+			<li>Pretty row 13</li>
+			<li>Pretty row 14</li>
+			<li>Pretty row 15</li>
+			<li>Pretty row 16</li>
+			<li>Pretty row 17</li>
+			<li>Pretty row 18</li>
+			<li>Pretty row 19</li>
+			<li>Pretty row 20</li>
+			<li>Pretty row 21</li>
+			<li>Pretty row 22</li>
+			<li>Pretty row 23</li>
+			<li>Pretty row 24</li>
+			<li>Pretty row 25</li>
+			<li>Pretty row 26</li>
+			<li>Pretty row 27</li>
+			<li>Pretty row 28</li>
+			<li>Pretty row 29</li>
+			<li>Pretty row 30</li>
+			<li>Pretty row 31</li>
+			<li>Pretty row 32</li>
+			<li>Pretty row 33</li>
+			<li>Pretty row 34</li>
+			<li>Pretty row 35</li>
+			<li>Pretty row 36</li>
+			<li>Pretty row 37</li>
+			<li>Pretty row 38</li>
+			<li>Pretty row 39</li>
+			<li>Pretty row 40</li>
+			<li>Pretty row 41</li>
+			<li>Pretty row 42</li>
+			<li>Pretty row 43</li>
+			<li>Pretty row 44</li>
+			<li>Pretty row 45</li>
+			<li>Pretty row 46</li>
+			<li>Pretty row 47</li>
+			<li>Pretty row 48</li>
+			<li>Pretty row 49</li>
+			<li>Pretty row 50</li>
+		</ul>
+	</div>
+</div>
+</div>
+<div id="syy" style="color:#fff;"></div>
+asdfasdf<br>
+<a href="javascript:showselect();">顯示選單</a>
+adsf<br>
+asf<br>
+adsf<br>
+asdf<br>
+asdfa<br>
+adsf<br>
+as<br>
+dfasdf<br>
+as<br>
+df<br>
+asdfv<br>
+f<br>
+das<br>
+df<br>
+asdf<br>
+</div>
+</div>
+
+
+<div class="page" id="main10">
+<div class="header">測試iscroll</div>
+<div class="content" style="background:#345687;">
+adfije<br>
+adfiajsfije<br>
+adifje<br>
+adsfadfadf<br>
+adfadf
+<br>
+afadfadsf<br>
+adfafefef<br>
+dfefefe
+<br>
+dfef
+<br>
+adfe<br>
+adfe<br>
+adfe<br>
+adfe<br>
+<a href="javascript:stv()"></a>
+adfe<br>
+adfe<br>
+adfe<br>
+sfefefadfe<br>
+dfffefadfe<br>
+adfe<br>
+adfe<br>
+adfadsfdfefadfe<br>
+<div >
+<div id="vsdf" >
+<div id="scroller">
+<ul>
+			<li>Pretty cell 1</li>
+			<li>Pretty cell 2</li>
+			<li>Pretty cell 3</li>
+			<li>Pretty cell 4</li>
+			<li>Pretty cell 5</li>
+			<li>Pretty cell 6</li>
+			<li>Pretty cell 7</li>
+			<li>Pretty cell 8</li>
+			<li>Pretty cell 9</li>
+			<li>Pretty cell 10</li>
+			<li>Pretty cell 11</li>
+			<li>Pretty cell 12</li>
+			<li>Pretty cell 13</li>
+			<li>Pretty cell 14</li>
+			<li>Pretty cell 15</li>
+			<li>Pretty cell 16</li>
+			<li>Pretty cell 17</li>
+			<li>Pretty cell 18</li>
+			<li>Pretty cell 19</li>
+			<li>Pretty cell 20</li>
+		</ul>
+</div>
+</div>
+</div>
+<br>
+adfe<br>
+adfe<br>
+adfe<br>
+adfe<br>
+<a href="javascript:stv()"></a>
+adfe<br>
+adfe<br>
+adfe<br>
+sfefefadfe<br>
+dfffefadfe<br>
+adfe<br>
+adfe<br>
+adfadsfdfefadfe<br>
 </div>
 </div>
 </body>
