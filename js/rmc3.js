@@ -11,6 +11,32 @@ String.prototype.ReplaceAll = function (AFindText,ARepText)
   raRegExp = new RegExp(AFindText,"g");
   return this.replace(raRegExp,ARepText);
 };
+Array.prototype.findval=function(val)
+{
+	var isck=false;
+	for(var j in this)
+	{
+		if(this[j]==val){
+			isck=true;
+			break;
+		}
+	}
+	
+	return isck;
+};
+Array.prototype.delval=function(val)
+{
+	for(var j in this){
+		if(this[j]==val) this.splice(j,1);
+	}
+};
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 var RMC={
 		_SH:0,//視窗寬度
 		_SW:0,//視窗高度
@@ -20,6 +46,7 @@ var RMC={
 		_PAGE_EVENT:{'hidebefore':{},'hide':{},'showbefore':{},'show':{}},//事件 
 		_RUNING:false,//動畫移動中
 		_TMP:'',//暫存
+		_PAGELOAD:{ids:[],per:0,addper:0,pid:''},//page載入
 		init:function(fun){
 			this._TMP=fun;
 		},
@@ -204,17 +231,17 @@ var RMC={
 		//載入html
 		loadPage:function(file){RMC.loadpage(file);},
 		loadpage:function(file){
-			//alert($());
+			//alert(file);
 			$.get(file,function(data){
-				//alert(data);
+				alert(data); 
 				data=data.ReplaceAll('class="page"','class="page-load"');
 				$('body').append(data);
-				RMC.pageset();
+				RMC.pageset(file);
 			},'text');
 		},
 		//執行page設定
-		pageset:function(){
-			var HP=false;//header position
+		pageset:function(file){
+			var HP=false;//header position 
 			var FP=false;//footer position
 			$('.page-load').each(function(){
 				var CH=RMC._SH;
@@ -274,10 +301,42 @@ var RMC={
 				
 				$(this).attr('class','page display-none');
 			});
+			//檢查是否有計量
+			//alert(file);
+			if(this._PAGELOAD.ids.findval(file)){
+				this._PAGELOAD.ids.delval(file);//alert(this._PAGELOAD.ids);
+				if(this._PAGELOAD.ids.length<1) this._PAGELOAD.per=100;
+				else this._PAGELOAD.per +=this._PAGELOAD.addper;
+				//alert(this._PAGELOAD.ids[0]);
+				if(this._PAGELOAD.ids[0]!=undefined){
+					//alert(this._PAGELOAD.ids[0]);
+					RMC.loadpage(this._PAGELOAD.ids[0]);
+				}
+				//alert($('body').html());
+			}
+		},
+		//頁載入,載入後可導頁(陣列值,page id)
+		start_load:function(pfile,pid){
+			this._PAGELOAD.ids=pfile;
+			this._PAGELOAD.per=0;
+			this._PAGELOAD.addper=0;
+			this._PAGELOAD.pid=pid;
+			var nums=pfile.length;
+			if(pid!=undefined) setTimeout('RMC.start_page_time()',200);
+			this.loadpage(pfile[0]);
+		},
+		//檢查是否可以導頁了
+		start_page_time:function(){
+			if(this._PAGELOAD.per==100 || this._PAGELOAD.ids.length<1){
+				this._PAGELOAD.addper=0;
+				var pid=this._PAGELOAD.pid;
+				this._PAGELOAD.pid='';//alert(pid);
+				RMC.changepage(pid);
+			}else  setTimeout('RMC.start_page_time()',200);
 		},
 		//swipe event
 		swipe:function(name,type,fn){
-			if(type=='left'){alert('left');
+			if(type=='left'){//alert('left');
 				$('#'+name).on('swipeleft',function(e){
 					alert('left');
 				});
