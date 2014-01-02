@@ -43,10 +43,10 @@ var RMC={
 		_NOWID:'',//現在使用的ID
 		_PAGE_STORE:[],//頁的紀錄
 		_CORDOVA_STATUS:false,//cordova status
-		_PAGE_EVENT:{'hidebefore':{},'hide':{},'showbefore':{},'show':{}},//事件 
+		_PAGE_EVENT:{'hidebefore':{},'hide':{},'showbefore':{},'show':{},'showone':{},'hideone':{},'hidebeforeone':{},'showbeforeone':{}},//事件 
 		_RUNING:false,//動畫移動中
 		_TMP:'',//暫存
-		_PAGELOAD:{ids:[],per:0,addper:0,pid:''},//page載入
+		_PAGELOAD:{ids:[],per:0,addper:0,pid:'',hideid:''},//page載入
 		init:function(fun){
 			this._TMP=fun;
 		},
@@ -149,9 +149,17 @@ var RMC={
 				if(RMC._PAGE_EVENT['hidebefore'][RMC._NOWID]!=undefined){
 					eval(RMC._PAGE_EVENT['hidebefore'][RMC._NOWID]+"();");
 				}
+				if(RMC._PAGE_EVENT['hidebeforeone'][RMC._NOWID]!=undefined){
+					eval(RMC._PAGE_EVENT['hidebeforeone'][RMC._NOWID]+"();");
+					delete RMC._PAGE_EVENT['hidebeforeone'][RMC._NOWID];//執行一次後就不執行了
+				}
 				//顯示前
 				if(RMC._PAGE_EVENT['showbefore'][id]!=undefined){
 	                eval(RMC._PAGE_EVENT['showbefore'][id]+"();");
+				}
+				if(RMC._PAGE_EVENT['showbeforeone'][id]!=undefined){
+	                eval(RMC._PAGE_EVENT['showbeforeone'][id]+"();");
+	                delete RMC._PAGE_EVENT['showbeforeone'][id];
 				}
 				window.location.hash=id;
 				this._PAGE_STORE.push(id);
@@ -174,9 +182,18 @@ var RMC={
 	                    //alert(RMC._PAGE_EVENT['show'][id]);
 	                    eval(RMC._PAGE_EVENT['show'][id]+"();");
 					}
+					if(RMC._PAGE_EVENT['showone'][id]!=undefined){
+	                    //alert(RMC._PAGE_EVENT['show'][id]);
+	                    eval(RMC._PAGE_EVENT['showone'][id]+"();");
+	                    delete RMC._PAGE_EVENT['showone'][id];
+					}
 					//隱藏後
 					if(RMC._PAGE_EVENT['hide'][hide_id]!=undefined){
 	                    eval(RMC._PAGE_EVENT['hide'][hide_id]+"();");
+					}
+					if(RMC._PAGE_EVENT['hideone'][hide_id]!=undefined){
+	                    eval(RMC._PAGE_EVENT['hideone'][hide_id]+"();");
+	                    delete RMC._PAGE_EVENT['hideone'][hide_id];
 					}
 					//alert(RMC._PAGE_EVENT['show']);
 				},1200);
@@ -184,12 +201,16 @@ var RMC={
 		},
 		backPage:function(){RMC.backpage();},
 		backpage:function(){
-			if(!RMC._RUNING){
+			if(!RMC._RUNING){//alert(this._PAGE_STORE);
 				if(this._PAGE_STORE.length>1){
 					RMC._RUNING=true;
 					//隱藏前
 					if(RMC._PAGE_EVENT['hidebefore'][RMC._NOWID]!=undefined){
 						eval(RMC._PAGE_EVENT['hidebefore'][RMC._NOWID]+"();");
+					}
+					if(RMC._PAGE_EVENT['hidebeforeone'][RMC._NOWID]!=undefined){
+						eval(RMC._PAGE_EVENT['hidebeforeone'][RMC._NOWID]+"();");
+						delete RMC._PAGE_EVENT['hidebeforeone'][RMC._NOWID];
 					}
 					var hide_id=RMC._NOWID;
 					var tmp='#'+RMC._NOWID;
@@ -200,6 +221,10 @@ var RMC={
 					//顯示前
 					if(RMC._PAGE_EVENT['showbefore'][RMC._NOWID]!=undefined){
 		                eval(RMC._PAGE_EVENT['showbefore'][RMC._NOWID]+"();");
+					}
+					if(RMC._PAGE_EVENT['showbeforeone'][RMC._NOWID]!=undefined){
+		                eval(RMC._PAGE_EVENT['showbeforeone'][RMC._NOWID]+"();");
+		                delete RMC._PAGE_EVENT['showbeforeone'][RMC._NOWID];
 					}
 					$('#'+RMC._NOWID).attr('class','page');
 					window.location.hash=RMC._NOWID;
@@ -214,9 +239,18 @@ var RMC={
 		                    //alert(RMC._PAGE_EVENT['show'][id]);
 		                    eval(RMC._PAGE_EVENT['show'][RMC._NOWID]+"();");
 						}
+						if(RMC._PAGE_EVENT['showone'][RMC._NOWID]!=undefined){
+		                    //alert(RMC._PAGE_EVENT['show'][id]);
+		                    eval(RMC._PAGE_EVENT['showone'][RMC._NOWID]+"();");
+		                    delete RMC._PAGE_EVENT['showone'][RMC._NOWID];
+						}
 						//隱藏後
 						if(RMC._PAGE_EVENT['hide'][hide_id]!=undefined){
 		                    eval(RMC._PAGE_EVENT['hide'][hide_id]+"();");
+						}
+						if(RMC._PAGE_EVENT['hideone'][hide_id]!=undefined){
+		                    eval(RMC._PAGE_EVENT['hideone'][hide_id]+"();");
+		                    delete RMC._PAGE_EVENT['hideone'][hide_id];
 						}
 					},1200);
 					//var tmp=this._PAGE_STORE.pop();
@@ -233,7 +267,7 @@ var RMC={
 		loadpage:function(file){
 			//alert(file);
 			$.get(file,function(data){
-				alert(data); 
+				//alert(data); 
 				data=data.ReplaceAll('class="page"','class="page-load"');
 				$('body').append(data);
 				RMC.pageset(file);
@@ -316,11 +350,12 @@ var RMC={
 			}
 		},
 		//頁載入,載入後可導頁(陣列值,page id)
-		start_load:function(pfile,pid){
+		start_load:function(pfile,pid,hideid){
 			this._PAGELOAD.ids=pfile;
 			this._PAGELOAD.per=0;
 			this._PAGELOAD.addper=0;
 			this._PAGELOAD.pid=pid;
+			if(hideid!=undefined) this._PAGELOAD.hideid=hideid;//是否都載入完後刪除該id紀錄
 			var nums=pfile.length;
 			if(pid!=undefined) setTimeout('RMC.start_page_time()',200);
 			this.loadpage(pfile[0]);
@@ -332,6 +367,10 @@ var RMC={
 				var pid=this._PAGELOAD.pid;
 				this._PAGELOAD.pid='';//alert(pid);
 				RMC.changepage(pid);
+				if( this._PAGELOAD.hideid!=undefined){
+					this._PAGE_STORE.delval(this._PAGELOAD.hideid);
+					this._PAGELOAD.hideid='';
+				}
 			}else  setTimeout('RMC.start_page_time()',200);
 		},
 		//swipe event
