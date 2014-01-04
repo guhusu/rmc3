@@ -47,6 +47,7 @@ var RMC={
 		_RUNING:false,//動畫移動中
 		_TMP:'',//暫存
 		_PAGELOAD:{ids:[],per:0,addper:0,pid:'',hideid:''},//page載入
+		_DOWNLIST:{},//設定iscroll 紀錄
 		init:function(fun){
 			this._TMP=fun;
 		},
@@ -465,6 +466,24 @@ var RMC={
 				tap:fun,
 				threshold:50
 			});
+		},
+		//設定 down-list
+		setDownList:function(id){
+			
+		},
+		selDownList:function(id,funv){
+			$('#'+id).css('display','block');
+			if(this._DOWNLIST[id]==undefined){
+				var i=1;
+				var name='';
+				$('#'+id+' .bar').each(function(){
+					name=id+i;
+					$(this).attr('id',name);
+					RMC._DOWNLIST[name] = new IScroll('#'+name, { mouseWheel: true ,snap: true});
+					i++;
+				});
+				//this._DOWNLIST[id] = new IScroll('#wrapper', { mouseWheel: true ,snap: true});
+			}
 		}
 };
 //cordova 參數
