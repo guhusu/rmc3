@@ -73,8 +73,10 @@ var RMC={
 				var header=$(this).find('.header');
 				var footer=$(this).find('.footer');
 				//HP=header.attr('data-position');
-				if(header){
+				if(header.length>0){
 					HP=$(header).outerHeight(true);//alert('id='+this.id+' h='+HP);
+					var headern=$(this).find('.header-nameb');
+					if(headern.length>0) HP -=30;
 					CH -=HP;
 					chf=true;
 				}
