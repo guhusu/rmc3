@@ -104,13 +104,15 @@ var RMC={
 					}
 				}
 				$(this).attr('class','page display-none');
-				if(hash=='' && i==1) {
+				//if(hash=='' && i==1) {
+				if(i==1) {
 					RMC._NOWID=this.id;
 					RMC._PAGE_STORE.push(this.id);
 				}
 			});
 			if(hash!='')
 			{
+				hash=hash.substr(1);
 				RMC._NOWID=hash;
 				RMC._PAGE_STORE.push(hash);
 			}
