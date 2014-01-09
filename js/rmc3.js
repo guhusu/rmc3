@@ -496,4 +496,10 @@ $(document).ready(function(){
 	if(RMC._TMP!=''){
 		(RMC._TMP)();
 	}
+	//$("img.lazy").lazy();//圖片預載
+	//jQuery("img.lazy").lazy();
+});
+jQuery(document).ready(function() {
+    //jQuery("img.lazy").lazy();
+	$('img .lazy').lazy();
 });
