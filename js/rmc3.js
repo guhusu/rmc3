@@ -498,8 +498,9 @@ $(document).ready(function(){
 	}
 	//$("img.lazy").lazy();//圖片預載
 	//jQuery("img.lazy").lazy();
+	$("img.lazy").lazyload();
 });
-jQuery(document).ready(function() {
+//jQuery(document).ready(function() {
     //jQuery("img.lazy").lazy();
-	$('img .lazy').lazy();
-});
+	//$('img .lazy').lazy();
+//});
