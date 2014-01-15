@@ -330,6 +330,14 @@ function swipe2(event, phase, direction, distance){
 /*$('#newbr').bind('touchmove', function(e) { 
     console.log($(this).scrollTop()); // Replace this with your code.
 });*/
+
+function GoUrl(url) {
+    var ref = window.open(url, '_blank', 'location=no');
+    //ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
+    //ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
+    ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+    ref.addEventListener('exit', function(event) { alert(event.type); });
+}
 </script>
 <style>
 .bbgg {
@@ -398,6 +406,14 @@ adfadf<br>
 <a href="load.html">開始載入時</a>
 </p>
 
+
+<p>
+<a href="javascript:GoUrl('gallery.html');">圖片測試</a>
+</p>
+<p>
+<a href="gallery.html">圖片測試</a>
+</p>
+
 <span class="checkbox">
 
 </span>
@@ -431,9 +447,16 @@ adfadfad<br>
 adfadfad<br>
 adfadfad<br>
 adfadfad<br>
-<img src="images/qqd.jpg"  border="0" />
+<img src="images/qqd.jpg"  border="0" /><br>
+<img src="images/qqd2.jpg"  border="0" /><br>
+<img src="images/qqd3.jpg"  border="0" /><br>
+<img src="images/qqd4.jpg"  border="0" /><br>
 lazy<br>
-<img class="lazy" data-original="images/qqd.jpg" src=""  border="0" />
+<img class="lazy" data-original="images/qqd.jpg" src="" width="100" height="100"  border="0" />
+<img class="lazy" data-original="images/qqd2.jpg" src=""  border="0" />
+<img class="lazy" data-original="images/qqd3.jpg" src=""  border="0" />
+<img class="lazy" data-original="images/qqd4.jpg" src=""  border="0" />
+
 lazy<br>
 adfadfad<br>
 adfadfad<br>
