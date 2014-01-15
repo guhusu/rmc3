@@ -111,6 +111,20 @@ var RMC={
 					RMC._NOWID=this.id;
 					RMC._PAGE_STORE.push(this.id);
 				}
+				//
+				var ln = $(this).find('.l-area').length;
+				var rn = $(this).find('.r-area').length;
+				if(ln>0 || rn>0){//alert(ln);
+					if(ln>rn){
+						ww=ln*41*2;
+						ww=RMC._SW-ww;
+						$(this).find('.header-namea').css('width',ww+'px');
+					}else{
+						ww=rn*41*2;
+						ww=RMC._SW-ww;
+						$(this).find('.header-namea').css('width',ww+'px');
+					}
+				}
 			});
 			if(hash!='')
 			{
@@ -487,6 +501,14 @@ var RMC={
 					i++;
 				});
 				//this._DOWNLIST[id] = new IScroll('#wrapper', { mouseWheel: true ,snap: true});
+			}
+		},
+		//執行推播
+		runPush:function(){
+			if(this._CORDOVA_STATUS){
+				push_start();
+			}else{
+				setTimeout('RMC.runPush()',500);
 			}
 		}
 };
