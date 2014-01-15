@@ -16,13 +16,14 @@ var pushNotification;
 function push_start()
 {
 	try 
-    { 
+    { //alert( window.plugins.pushNotification);
 		pushNotification = window.plugins.pushNotification;
 		if(device.platform == 'android' || device.platform == 'Android') {
 		    //localStorage["appname"]
-			pushNotification.register(successHandler, errorHandler, {"senderID":"754846154787","ecb":"onNotificationGCM"});                // required!
+			//alert(device.platform);
+			if(!localStorage["is_reg_push"]) pushNotification.register(successHandler, errorHandler, {"senderID":"754846154787","ecb":"onNotificationGCM"});                // required!
 		} else {
-			pushNotification.register(tokenHandler, errorHandler, {"badge":"true","sound":"true","alert":"true","ecb":"onNotificationAPN"});        // required!
+			if(!localStorage["is_reg_push"]) pushNotification.register(tokenHandler, errorHandler, {"badge":"true","sound":"true","alert":"true","ecb":"onNotificationAPN"});        // required!
 		}
 	}
     catch(err) 
@@ -34,7 +35,10 @@ function push_start()
 }
 
 function tokenHandler (result) {
-	localStorage["is_reg_push"]=true;
+	//localStorage["is_reg_push"]=true;
+	// Your iOS push server needs to know the token before it can push to this device
+    // here is where you might want to send it the token for later use.
+	localStoreage["is_reg_token"]=result;//ios
 }
 
 function successHandler (result) {
@@ -48,7 +52,7 @@ function errorHandler (error) {
 //handle APNS notifications for iOS
 function onNotificationAPN(e) {
     if (e.alert) {
-         $("#pushul").append('<li>push-notification: ' + e.alert + '</li>');
+         $("#pushul").append('<li>' + e.alert + '</li>');
          navigator.notification.alert(e.alert);
     }
         
@@ -69,7 +73,7 @@ function onNotificationGCM(e) {
 		case 'registered':
 			if ( e.regid.length > 0 )
 			{
-				var url="http://www.app4u.tw/sendpush/reice_regid";
+				var url="http://www.app4u.tw/sendpush/reice_regid";//alert(pid+' -- '+cid+' -- '+e.regid);
 				$.post(url,{regid:e.regid,cid:cid,pid:pid},function(data){
 					if(data.status=='y' || data.status=='n3'){
 						localStorage["is_reg_push"]=true;
@@ -90,7 +94,7 @@ function onNotificationGCM(e) {
 					var aid = RMC._NOWID//$.mobile.activePage.attr("id");
 					//alert(aid);
 					if(aid=='pushmsg'){
-						//直撫更新資料
+						//直接更新資料
 						$('#pushmsgul').prepend(msg);//alert(msg);
 						//$('#pushmsgul').listview('refresh');
 						//寫入暫存
@@ -180,3 +184,4 @@ function onNotificationGCM(e) {
 	}
 }
 
+RMC.runPush();
