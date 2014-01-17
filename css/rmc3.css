@@ -1008,13 +1008,33 @@ background: linear-gradient(to bottom, rgba(105,120,150,1) 0%,rgba(59,89,152,1) 
 /* pageoverlay */
 #pageoverlay {
 	background: rgb(69,72,77); /* Old browsers */
-background: -moz-linear-gradient(top, rgba(69,72,77,0.8) 0%, rgba(0,0,0,0.8) 100%); /* FF3.6+ */
-background: -webkit-linear-gradient(top, rgba(69,72,77,0.8) 0%,rgba(0,0,0,0.8) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, rgba(69,72,77,0.8) 0%,rgba(0,0,0,0.8) 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, rgba(69,72,77,0.8) 0%,rgba(0,0,0,0.8) 100%); /* IE10+ */
-background: linear-gradient(to bottom, rgba(69,72,77,0.8) 0%,rgba(0,0,0,0.8) 100%); /* W3C */
+background: -moz-linear-gradient(top, rgba(69,72,77,0.8) 0%, rgba(0,0,0,0.6) 100%); /* FF3.6+ */
+background: -webkit-linear-gradient(top, rgba(69,72,77,0.8) 0%,rgba(0,0,0,0.6) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(69,72,77,0.8) 0%,rgba(0,0,0,0.6) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(69,72,77,0.8) 0%,rgba(0,0,0,0.6) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(69,72,77,0.8) 0%,rgba(0,0,0,0.6) 100%); /* W3C */
 pointer-events: none;
 }
+/* 隱藏選單 */
+#menu {
+	background: rgb(51,51,51); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(51,51,51,1) 0%, rgba(51,51,51,1) 100%); /* FF3.6+ */
+background: -webkit-linear-gradient(top, rgba(51,51,51,1) 0%,rgba(51,51,51,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(51,51,51,1) 0%,rgba(51,51,51,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(51,51,51,1) 0%,rgba(51,51,51,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(51,51,51,1) 0%,rgba(51,51,51,1) 100%); /* W3C */	
+}
+.menu-con {
+	position:relative;
+	display:block;
+	width:100%;
+	margin:1px;
+}
+.menu-con > div {
+	background:#999;
+	color:#fff;
+}
+
 
 /*按鈕*/
 .btn {

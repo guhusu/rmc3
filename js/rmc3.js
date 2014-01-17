@@ -51,6 +51,12 @@ var RMC={
 		init:function(fun){
 			this._TMP=fun;
 		},
+		//顯示選單
+		showMenu:function(){
+			alert("test");
+			$('#pageoverlay').css('display','');
+			$('#menu').css('display','');
+		},
 		create:function(){
 			RMC._SW=$(window).width();
 			RMC._SH=$(window).height();
@@ -59,7 +65,14 @@ var RMC={
 			var i=0;
 			var hash=window.location.hash;
 			//設定overlay
-			$('#pageoverlay').css({position:'absolute','z-index':'99','display':'none',width:RMC._SW+'px',height:RMC._SH+'px','overflow':'hidden'});
+			$('#pageoverlay').css({position:'absolute','z-index':99,'display':'none',width:RMC._SW+'px',height:RMC._SH+'px','overflow':'hidden'});
+			$('#pageoverlay').click(function(){
+				$(this).css('display','none');
+				$('#menu').css('display','none');
+			});
+			$('#menu').css({position:'absolute','z-index':100,'display':'none',width:'200px',height:RMC._SH+'px','overflow':'hidden'});
+			
+			//$('.menu-con').css({height:});
 			//設定page
 			$('.page').each(function(){
 				var CH=RMC._SH;
