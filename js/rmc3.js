@@ -48,14 +48,18 @@ var RMC={
 		_TMP:'',//暫存
 		_PAGELOAD:{ids:[],per:0,addper:0,pid:'',hideid:''},//page載入
 		_DOWNLIST:{},//設定iscroll 紀錄
+		_GALLERY:{},//gallery物件設定
 		init:function(fun){
 			this._TMP=fun;
 		},
 		//顯示選單
 		showMenu:function(){
-			alert("test");
 			$('#pageoverlay').css('display','');
 			$('#menu').css('display','');
+		},
+		hide_Menu:function(){
+			$('#pageoverlay').css('display','none');
+			$('#menu').css('display','none');
 		},
 		create:function(){
 			RMC._SW=$(window).width();
@@ -67,11 +71,13 @@ var RMC={
 			//設定overlay
 			$('#pageoverlay').css({position:'absolute','z-index':99,'display':'none',width:RMC._SW+'px',height:RMC._SH+'px','overflow':'hidden'});
 			$('#pageoverlay').click(function(){
-				$(this).css('display','none');
-				$('#menu').css('display','none');
+				RMC.hide_Menu();
 			});
+			$('#pageoverlay').swipe({swipe:function(){RMC.hide_Menu();},threshold:0});
+			$('#menu').swipe({swipe:function(){RMC.hide_Menu();},threshold:0});
+			$('#menu').swipe({tap:function(){RMC.hide_Menu();},threshold:50});
 			$('#menu').css({position:'absolute','z-index':100,'display':'none',width:'200px',height:RMC._SH+'px','overflow':'hidden'});
-			
+			//$('#menu').
 			//$('.menu-con').css({height:});
 			//設定page
 			$('.page').each(function(){
@@ -523,6 +529,48 @@ var RMC={
 			}else{
 				setTimeout('RMC.runPush()',500);
 			}
+		},
+		//設定gallery
+		setGallery:function(id){
+			RMC._GALLERY[id]={};
+			RMC._GALLERY[id]['img']=[];
+			RMC._GALLERY[id]['title']=[];
+			RMC._GALLERY[id]['name']={};
+			var i=0;
+			var alt='';
+			var src='';
+			$('#'+id+' .gallery img').each(function(){
+				src=$(this).attr('src');
+				RMC._GALLERY[id]['img'][i]=new Image();
+				RMC._GALLERY[id]['img'][i].src=src;
+				alt=$(this).attr('alt');
+				if(alt!=undefined) RMC._GALLERY[id]['title'][i]=alt;
+				else RMC._GALLERY[id]['title'][i]='';
+				$(this).attr('re',i);
+				++i;
+			});
+		},
+		//執行
+		runGallery:function(id,obj){
+			alert('rungallery');
+			alert('cc');
+			if(!document.getElementById('rgallery')){
+				//alert('ccc');
+				$('body').prepend('<div id="rgallery" style="position:absloute;z-index:99;width:'+RMC._SW+'px;height:'+RMC._SH+'px;overflow:hidden;background:rgb(0,0,0)"></div>');
+			}
+			//alert(src.width);
+			alert('cc1');
+			var da='';
+			var img='';
+			for(var i=0;i<RMC._GALLERY[id]['img'].length;i++){
+				if(RMC._GALLERY[id]['img'][i].width>RMC._GALLERY[id]['img'][i].height) img='<img src="'+RMC._GALLERY[id]['img'][i].src+'" width="'+RMC._SW+'" />';
+				else img='<img src="'+RMC._GALLERY[id]['img'][i].src+'" width="'+RMC._SH+'" />';
+				da +='<div style="width:'+RMC._SW+'px;height:'+RMC._SH+'px;overflow:hidden;">'+img+'</div>';
+			}
+			alert('cc2');
+			var totalW=RMC._SW*RMC._GALLERY[id]['img'].length;
+			$('#rgallery').html('<div style="width:px;'+totalW+'height:'+RMC._SH+'px;overflow:hidden;">'+da+'</div>');
+			alert('cc');
 		}
 };
 //cordova 參數

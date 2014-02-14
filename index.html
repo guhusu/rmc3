@@ -14,7 +14,19 @@
 <!--script type="text/javascript" charset="utf-8" src="js/pushmsg.js"></script-->
 <script type="text/javascript" charset="utf-8">
 RMC.init(function(){
-	
+	//alert('start');
+	/*var images=[];
+	var i=0;
+	$('#mygallery .gallery img').each(function(){
+		images[i]=new Image();
+		images[i].src=$(this).attr('src');
+		//alert($(this).attr('src'));
+		++i;
+	});
+	//alert('end');
+	alert(images.length);
+	*/
+	RMC.setGallery('mygallery');
 });
 RMC.add_event('show','main10','scc3');
 function scc3()
@@ -347,11 +359,15 @@ function GoUrl(url) {
 </head>
 <body>
 <div id="pageoverlay"></div>
-<div id="menu"><div class="menu-con"><div>測試一下</div><div>測試一下3</div><div>測試一下6</div></div></div>
+<div id="menu"><div class="menu-con"><div tap="RMC.changepage('main7');">測試一下</div><div tap="RMC.changepage('main9');">測試一下3</div><div tap="RMC.changepage('main8');">測試一下6</div><div tap="RMC.hide_Menu();">關閉</div></div></div>
 <div class="page" id="main">
 <div class="header">第一頁</div>
 <div class="content" style="background:url(img/logo.png);-webkit-background-size:cover;   -moz-background-size:cover;   -o-background-size:cover;   background-size:cover">
 adfadf<br>
+
+<p>
+<a href="javascript:RMC.changepage('mygallery');" >相簿</a>
+</p>
 adfadfad<br>
 <a href="pep1.html">pep1.html</a>
 
@@ -418,6 +434,7 @@ adfadf<br>
 <p>
 <a href="trach.html">垃圾清運</a>
 </p>
+
 
 <p>
 <a href="javascript:GoUrl('gallery.html');">圖片測試</a>
@@ -1074,5 +1091,16 @@ asdfei
    </ul><div class="clear"></div></div>
 </div>
 
+
+
+<div class="page" id="mygallery">
+<div class="header">圖片移動測試</div>
+<div class="content">
+<ul class="gallery">
+<li><img src="img/gallery/256.jpg" /></li>
+<li><img src="img/gallery/257.jpg" /></li>
+</ul>
+</div>
+</div>
 </body>
 </html>
