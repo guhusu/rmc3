@@ -1,1 +1,0 @@
-rmc version 3
