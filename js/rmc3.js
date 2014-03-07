@@ -50,6 +50,7 @@ var RMC={
 		_DOWNLIST:{},//設定iscroll 紀錄
 		_GALLERY:{},//gallery物件設定
 		_RUNGALLERYID:'',//gallery正在使用中id
+		_BACKDEL:'',//返回時關閉提示等、不使用移動特效
 		init:function(fun){
 			this._TMP=fun;
 		},
@@ -240,6 +241,11 @@ var RMC={
 		},
 		backPage:function(){RMC.backpage();},
 		backpage:function(){
+			if(RMC._BACKDEL!=''){
+				$('#'+RMC._BACKDEL).css('display','none');
+				RMC._BACKDEL='';
+				return false;
+			}
 			if(!RMC._RUNING){//alert(this._PAGE_STORE);
 				if(this._PAGE_STORE.length>1){
 					RMC._RUNING=true;
@@ -540,6 +546,7 @@ var RMC={
 			RMC._GALLERY[id]['tdistance']=0;//總共移動的距離
 			RMC._GALLERY[id]['distance']=0;//目前移動的距離
 			RMC._GALLERY[id]['swipe']='';//目前移動的位置left ro right
+			RMC._GALLERY[id]['max']=RMC._SW;//最小負值,用於超過時反回，而不用講算數量
 			var i=0;
 			var alt='';
 			var src='';
@@ -551,17 +558,48 @@ var RMC={
 				if(alt!=undefined) RMC._GALLERY[id]['title'][i]=alt;
 				else RMC._GALLERY[id]['title'][i]='';
 				$(this).attr('re',i);
+				RMC._GALLERY[id]['max']　-=RMC._SW;
 				++i;
 			});
+			var w=RMC._SW;
+		    var h=RMC._SW;
+		    if(w<200){
+		        $(".gallery li").css("width","100%");
+		        
+		    }
+		    if(w>=200 && w<600){
+		        $(".gallery li").css("width","50%");
+		        h *=0.5;
+		    }
+		    if(w>=600 && w<900){
+		        $(".gallery li").css("width","33.33333%");
+		        h *=0.33333;
+		    }
+		    if(w>=900 && w<1200){
+		        $(".gallery li").css("width","25%");
+		        h *=0.25;
+		    }
+		    if(w>=1200){
+		        $(".gallery li").css("width","20%");
+		        h *=0.20;
+		    }
+		    $(".gallery li img").css("height",h+"px");
+
 		},
 		//執行
 		runGallery:function(id,obj){
+			RMC._BACKDEL='rgallery';//返回關閉用
 			RMC._RUNGALLERYID=id;//加入執行中的id
+			var sevent=false;
 			if(!document.getElementById('rgallery')){
 				//alert('ccc');
 				$('body').prepend('<div id="rgallery" style="position:absolute;z-index:99;width:'+RMC._SW+'px;height:'+RMC._SH+'px;overflow:hidden;background:rgb(0,0,0);-webkit-animation-duration: 1s;-webkit-animation-fill-mode: both;"></div>');
+			}else{
+				$('#rgallery').css('display','');
+				sevent=true;
 			}
 			//alert(src.width);400/200=x/150 400/2*150=x
+			var startnum=0-($(obj).attr('re')*RMC._SW);
 			var da='';
 			var img='';//alert(RMC._GALLERY[id]['img'].length);
 			var sh=0;
@@ -577,42 +615,45 @@ var RMC={
 				da +='<div style="float:left;width:'+RMC._SW+'px;height:'+RMC._SH+'px;overflow:hidden;text-align:center;">'+img+'</div>';
 			}//alert(da);
 			var totalW=RMC._SW*RMC._GALLERY[id]['img'].length;//alert(totalW);
-			$('#rgallery').html('<div id="rgallery_div" style="width:'+totalW+'px;height:'+RMC._SH+'px;overflow:hidden;">'+da+'</div>');
-			$('#rgallery').swipe({swipeStatus:function(event, phase, direction, distance){
-				if(phase=="move"){
-					if(direction=='left'){
-						RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
-						RMC._GALLERY[id]['swipe']='left';
-						var mar=RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']-distance;
-						//$(event.target).css('margin-left',mar+'px');
-						$('#rgallery_div').css('-webkit-transform',' translateX('+mar+'px)');
-					}else if(direction=='right'){
-						RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
-						RMC._GALLERY[id]['swipe']='right';
-						//var mar=barpadding+distance;
-						var mar=RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+distance;
-						//$(event.target).css('margin-left',mar+'px');
-						$('#rgallery_div').css('-webkit-transform',' translateX('+mar+'px)');
-					}
-				}
-				
-				if(phase=='end'){
-					if(RMC._GALLERY[id]['distance']>50){
-						if(RMC._GALLERY[id]['swipe']=='left'){
-							RMC._GALLERY[RMC._RUNGALLERYID]['tdistance'] -=RMC._SW;
-							if(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']<0) RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']=0;
+			$('#rgallery').html('<div style="position:absolute;width:'+RMC._SW+'px;text-align:right;height:18px;"><a href="javascript:RMC.hideGallery();"><img src="css/images/b/07-2.png" border="0" style="border:#fff solid 1px;" /></a></div><div id="rgallery_div" style="width:'+totalW+'px;height:'+RMC._SH+'px;overflow:hidden;-webkit-transform:translateX('+startnum+'px);">'+da+'</div>');
+			if(!sevent){
+				$('#rgallery').swipe({swipeStatus:function(event, phase, direction, distance){
+					if(phase=="move"){
+						if(direction=='left'){
+							RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
+							RMC._GALLERY[id]['swipe']='left';
+							var mar=RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']-distance;
+							//$(event.target).css('margin-left',mar+'px');
+							$('#rgallery_div').css('-webkit-transform',' translateX('+mar+'px)');
+						}else if(direction=='right'){
+							RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
+							RMC._GALLERY[id]['swipe']='right';
+							//var mar=barpadding+distance;
+							var mar=RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+distance;
+							//$(event.target).css('margin-left',mar+'px');
+							$('#rgallery_div').css('-webkit-transform',' translateX('+mar+'px)');
 						}
-						if(RMC._GALLERY[id]['swipe']=='right'){
-							RMC._GALLERY[RMC._RUNGALLERYID]['tdistance'] +=RMC._SW;
-							
-						}
-					}else{
-						//$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
 					}
-					$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
-					//barpadding=parseInt($(event.target).css('margin-left'));
-				}
-			}, allowPageScroll:"vertical"});
+					
+					if(phase=='end'){
+						if(RMC._GALLERY[id]['distance']>50){
+							if(RMC._GALLERY[id]['swipe']=='left'){
+								RMC._GALLERY[RMC._RUNGALLERYID]['tdistance'] -=RMC._SW;
+								if(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']<RMC._GALLERY[id]['max']) RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']=RMC._GALLERY[id]['max'];
+							}
+							if(RMC._GALLERY[id]['swipe']=='right'){
+								RMC._GALLERY[RMC._RUNGALLERYID]['tdistance'] +=RMC._SW;
+								if(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']>0) RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']=0;
+								//alert(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']);
+							}
+						}else{
+							//$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
+						}
+						$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
+						//barpadding=parseInt($(event.target).css('margin-left'));
+					}
+				}, allowPageScroll:"vertical"});
+			}
 			/*$('#rgallery').swipe({swipe:function(event, direction, distance, duration, fingerCount){
 				//alert(direction+' -- '+distance);
 				if(direction=='left'){
@@ -621,6 +662,10 @@ var RMC={
 					$('#rgallery_div').css('-webkit-transform',' translateX('+distance+'px)');
 				}
 			},threshold:0});*/
+		},
+		hideGallery:function(){
+			$('#'+RMC._BACKDEL).css('display','none');
+			RMC._BACKDEL='';
 		}
 };
 //cordova 參數

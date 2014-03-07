@@ -1071,9 +1071,9 @@ background: linear-gradient(to bottom, rgba(51,51,51,1) 0%,rgba(51,51,51,1) 100%
 	text-decoration: none;
 }
 /* 圖片瀏覽 */
-.gallery { list-style: none; padding: 0; margin: 0;}
+.gallery { list-style: none; padding: 0; margin: 0; overflow-y:hidden;}
 .gallery:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
 .gallery li { float: left; width: 33.33333333%; }
-.gallery li a{display:block; margin:5px; padding:4px 4px 10px 4px; background:#fff; box-shadow:1px 1px 3px #000; color:#000; text-decoration:none; text-align:center}
-.gallery li a:after{display:block; padding-top:10px; content:""; color:#000}
+.gallery li span{display:block; margin:5px; padding:4px 4px 10px 4px; background:#fff; box-shadow:1px 1px 3px #000; color:#000; text-decoration:none; text-align:center}
+.gallery li span:after{display:block; padding-top:10px; content:""; color:#000}
 .gallery li img { display: block; width: 100%; height: auto; }
