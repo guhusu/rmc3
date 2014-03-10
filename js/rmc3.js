@@ -50,7 +50,7 @@ var RMC={
 		_DOWNLIST:{},//設定iscroll 紀錄
 		_GALLERY:{},//gallery物件設定
 		_RUNGALLERYID:'',//gallery正在使用中id
-		_BACKDEL:'',//返回時關閉提示等、不使用移動特效
+		_BACKDEL:[],//返回時關閉提示等、不使用移動特效
 		init:function(fun){
 			this._TMP=fun;
 		},
@@ -241,9 +241,10 @@ var RMC={
 		},
 		backPage:function(){RMC.backpage();},
 		backpage:function(){
-			if(RMC._BACKDEL!=''){
-				$('#'+RMC._BACKDEL).css('display','none');
-				RMC._BACKDEL='';
+			if(RMC._BACKDEL.length>0){
+				$('#'+RMC._BACKDEL[RMC._BACKDEL.length-1]).css('display','none');
+				var tmp=RMC._BACKDEL.pop();
+				if(tmp=='rgallery_big') $("#rgallery").swipe("enable");
 				return false;
 			}
 			if(!RMC._RUNING){//alert(this._PAGE_STORE);
@@ -545,8 +546,11 @@ var RMC={
 			RMC._GALLERY[id]['name']={};//紀錄檔案名稱-目前未使用
 			RMC._GALLERY[id]['tdistance']=0;//總共移動的距離
 			RMC._GALLERY[id]['distance']=0;//目前移動的距離
-			RMC._GALLERY[id]['swipe']='';//目前移動的位置left ro right
+			RMC._GALLERY[id]['swipe']='';//目前移動的位置left or right
+			RMC._GALLERY[id]['pinch']='';//目前縮放移動 in or out 
+			RMC._GALLERY[id]['zoon']=1;//目前縮放比例
 			RMC._GALLERY[id]['max']=RMC._SW;//最小負值,用於超過時反回，而不用講算數量
+			RMC._GALLERY[id]['now']=0;//目前使用中圖片編號
 			var i=0;
 			var alt='';
 			var src='';
@@ -588,7 +592,7 @@ var RMC={
 		},
 		//執行
 		runGallery:function(id,obj){
-			RMC._BACKDEL='rgallery';//返回關閉用
+			RMC._BACKDEL.push('rgallery');//RMC._BACKDEL='rgallery';//返回關閉用
 			RMC._RUNGALLERYID=id;//加入執行中的id
 			var sevent=false;
 			if(!document.getElementById('rgallery')){
@@ -599,7 +603,9 @@ var RMC={
 				sevent=true;
 			}
 			//alert(src.width);400/200=x/150 400/2*150=x
-			var startnum=0-($(obj).attr('re')*RMC._SW);
+			var si=$(obj).attr('re');
+			RMC._GALLERY[id]['now']=si;
+			var startnum=0-(si*RMC._SW);
 			var da='';
 			var img='';//alert(RMC._GALLERY[id]['img'].length);
 			var sh=0;
@@ -610,14 +616,192 @@ var RMC={
 					sh=parseInt((RMC._SH-sh)/2);
 					if(sh>0) sh='style="margin-top:'+sh+'px;"';
 					else sh='';
-					img='<img src="'+RMC._GALLERY[id]['img'][i].src+'" width="'+RMC._SW+'" '+sh+' />';
-				}else img='<img src="'+RMC._GALLERY[id]['img'][i].src+'" height="'+RMC._SH+'" />';
+					img='<img src="'+RMC._GALLERY[id]['img'][i].src+'" width="'+RMC._SW+'" '+sh+' id="gcc'+i+'" />';
+				}else img='<img src="'+RMC._GALLERY[id]['img'][i].src+'" height="'+RMC._SH+'" id="gcc'+i+'" />';
 				da +='<div style="float:left;width:'+RMC._SW+'px;height:'+RMC._SH+'px;overflow:hidden;text-align:center;">'+img+'</div>';
 			}//alert(da);
 			var totalW=RMC._SW*RMC._GALLERY[id]['img'].length;//alert(totalW);
-			$('#rgallery').html('<div style="position:absolute;width:'+RMC._SW+'px;text-align:right;height:18px;z-index:99;"><a href="javascript:RMC.hideGallery();"><img src="css/images/w/07.png" border="0" style="border:#fff solid 1px;margin-top:10px;margin-right:20px;padding:3px;" /></a></div><div id="rgallery_div" style="width:'+totalW+'px;height:'+RMC._SH+'px;overflow:hidden;-webkit-transform:translateX('+startnum+'px);">'+da+'</div>');
+			$('#rgallery').html('<div id="rgallery_big" style="display:none;position:absolute;background:#000000;top:0px;width:'+RMC._SW+'px;height:'+RMC._SH+'px;z-index:100;"></div><div id="rgallery_cc" style="position:absolute;width:'+RMC._SW+'px;text-align:right;height:18px;z-index:99;"><a href="javascript:RMC.hideGallery();"><img src="css/images/gallery_close.png" border="0" style="border:#fff solid 1px;margin-top:10px;margin-right:20px;padding:3px;" /></a></div><div id="rgallery_div" style="width:'+totalW+'px;height:'+RMC._SH+'px;overflow:hidden;-webkit-transform:translateX('+startnum+'px);">'+da+'</div>');
+			RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']=startnum;
 			if(!sevent){
-				$('#rgallery').swipe({swipeStatus:function(event, phase, direction, distance){
+				
+				 /*$('#rgallery').swipe({
+					 pinchStatus:function(event, phase, direction, distance , duration , fingerCount, pinchZoom) {
+				        	$('#rgallery_cc').css('color','#ffffff').html("pinchStatuspinched " + distance + " px ");
+				          if(phase === $.fn.swipe.phases.PHASE_END || phase === $.fn.swipe.phases.PHASE_CANCEL) {
+				             //The handlers below fire after the status, 
+				             // so we can change the text here, and it will be replaced if the handlers below fire
+				        	  $('#rgallery_cc').css('color','#ffffff').html("No pinch was made");
+				           }
+				        },
+				        fingers:2
+				 });*/
+				
+				 $("#rgallery").swipe( {
+					 pinchStatus:function(event, phase, direction, distance , duration , fingerCount, pinchZoom) {
+						 //RMC.hideGallery();
+						 //$('#rgallery_big').html('<div id="rgallery_hide" style="position:absolute;width:'+RMC._SW+'px;text-align:right;height:18px;z-index:99;overflow:scroll;"><a href="javascript:RMC.hideScaleGallery();"><img src="css/images/w/07.png" border="0" style="border:#fff solid 1px;margin-top:10px;margin-right:20px;padding:3px;" /></a></div><img src="'+RMC._GALLERY[id]['img'][RMC._GALLERY[id]['now']].src+'" />').css('display','');
+						 RMC._BACKDEL.push('rgallery_big');
+						 $('#rgallery_big').html('<div id="rgallery_hide" style="position:absolute;width:'+RMC._SW+'px;text-align:right;height:18px;z-index:199;"><a href="javascript:RMC.hideGallery();"><img src="css/images/gallery_close.png" border="0" style="border:#fff solid 1px;margin-top:10px;margin-right:20px;padding:3px;box-shadow:1px 1px 2px #000;" /></a></div><div style="width:'+RMC._SW+'px;height:'+RMC._SH+'px;overflow:auto;"><img src="'+RMC._GALLERY[id]['img'][RMC._GALLERY[id]['now']].src+'" /></div>').css('display','');
+						 $("#rgallery").swipe("disable");
+						 RMC._GALLERY[id]['tdistance']=0-(RMC._GALLERY[id]['now']*RMC._SW);
+						 $('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[id]['tdistance']+'px)');
+						 //alert(RMC._GALLERY[id]['now']);
+						 //$('#rgallery_cc').css('color','#ffffff').html("pinchStatuspinched " + distance + " px Pinch zoom scale "+pinchZoom+"  Distance pinched "+distance+" Direction " + direction);
+				          //if(phase === $.fn.swipe.phases.PHASE_END || phase === $.fn.swipe.phases.PHASE_CANCEL) {
+				             //The handlers below fire after the status, 
+				             // so we can change the text here, and it will be replaced if the handlers below fire
+				        	 // $('#rgallery_cc').css('color','#ffffff').html("No pinch was made");
+				           //}
+				        	
+				        	//if(phase=='move'){
+				        	//	RMC._GALLERY[id]['zoon']=pinchZoom;
+				        	//	$('#rgallery_div').css('-webkit-transform',' scale('+pinchZoom+','+pinchZoom+')');
+				        	//$('#rgallery_div').css({'-webkit-transform':' scale('+pinchZoom+','+pinchZoom+')','-webkit-transform':' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)',});
+				        	//}
+				        },
+				        swipeStatus:function(event, phase, direction, distance , duration , fingerCount) {
+				        	//$('#rgallery_cc').css('color','#ffffff').html("swipeStatusswiped " + distance + ' px');
+				        	if(phase=="move"){
+								if(direction=='left'){
+									RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
+									RMC._GALLERY[id]['swipe']='left';
+									var mar=RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']-distance;
+									//$(event.target).css('margin-left',mar+'px');
+									$('#rgallery_div').css('-webkit-transform',' translateX('+mar+'px)');
+								}else if(direction=='right'){
+									RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
+									RMC._GALLERY[id]['swipe']='right';
+									//var mar=barpadding+distance;
+									var mar=RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+distance;
+									//$(event.target).css('margin-left',mar+'px');
+									$('#rgallery_div').css('-webkit-transform',' translateX('+mar+'px)');
+								}
+							}
+							//if(phase=='end'){
+								//$('#rgallery_cc').css('color','#ffffff').html($.fn.swipe.phases.PHASE_END+" - "+$.fn.swipe.phases.PHASE_CANCEL+" - "+phase+" - "+direction+' - '+distance);
+							if(phase === $.fn.swipe.phases.PHASE_END || phase === $.fn.swipe.phases.PHASE_CANCEL){
+								//$('#rgallery_cc').css('color','#ffffff').html(RMC._GALLERY[id]['distance']);
+								if(RMC._GALLERY[id]['distance']>50){
+									if(RMC._GALLERY[id]['swipe']=='left'){
+										RMC._GALLERY[RMC._RUNGALLERYID]['tdistance'] -=RMC._SW;
+										if(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']<RMC._GALLERY[id]['max']) RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']=RMC._GALLERY[id]['max'];
+									}
+									if(RMC._GALLERY[id]['swipe']=='right'){
+										RMC._GALLERY[RMC._RUNGALLERYID]['tdistance'] +=RMC._SW;
+										if(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']>0) RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']=0;
+										//alert(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']);
+									}
+								}else{
+									//$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
+								}
+								$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
+								//barpadding=parseInt($(event.target).css('margin-left'));
+								if(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']==0) RMC._GALLERY[id]['now']=0;
+								else RMC._GALLERY[id]['now']=Math.abs(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']/RMC._SW);
+								//alert(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']);
+							}
+				        },
+				        /*
+				        swipe:function(event, direction, distance, duration, fingerCount) {
+				        	$('#rgallery_cc').css('color','#ffffff').html("swipeYou swiped " + direction + " with " + fingerCount + " fingers");
+				        },*/
+				        /*pinchIn:function(event, direction, distance, duration, fingerCount, pinchZoom) {
+				        	$('#rgallery_cc').css('color','#ffffff').html("pinchInYou pinched " +direction + " by " + distance +"px, zoom scale is "+pinchZoom); 
+				        },
+				        pinchOut:function(event, direction, distance, duration, fingerCount, pinchZoom) {
+				        	$('#rgallery_cc').css('color','#ffffff').html("You pinched " +direction + " by " + distance +"px, zoom scale is "+pinchZoom);
+				        },*/
+				        fingers:$.fn.swipe.fingers.ALL
+				        //threshold:0
+				      });
+				
+				/*$('#rgallery').swipe({
+					swipeStatus:function(event,phase, direction, distance,duration,fingerCount ){
+						$('#rgallery_cc').css('color','#ffffff').html($.fn.swipe.phases.PHASE_END+" - "+$.fn.swipe.phases.PHASE_CANCEL+" - "+phase+" - "+direction+' - '+distance);
+						if(phase=="move"){
+							if(direction=='left'){
+								RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
+								RMC._GALLERY[id]['swipe']='left';
+								var mar=RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']-distance;
+								//$(event.target).css('margin-left',mar+'px');
+								$('#rgallery_div').css('-webkit-transform',' translateX('+mar+'px)');
+							}else if(direction=='right'){
+								RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
+								RMC._GALLERY[id]['swipe']='right';
+								//var mar=barpadding+distance;
+								var mar=RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+distance;
+								//$(event.target).css('margin-left',mar+'px');
+								$('#rgallery_div').css('-webkit-transform',' translateX('+mar+'px)');
+							}
+						}
+						//if(phase=='end'){
+							//$('#rgallery_cc').css('color','#ffffff').html($.fn.swipe.phases.PHASE_END+" - "+$.fn.swipe.phases.PHASE_CANCEL+" - "+phase+" - "+direction+' - '+distance);
+						if(phase === $.fn.swipe.phases.PHASE_END || phase === $.fn.swipe.phases.PHASE_CANCEL){
+							//$('#rgallery_cc').css('color','#ffffff').html(RMC._GALLERY[id]['distance']);
+							if(RMC._GALLERY[id]['distance']>50){
+								if(RMC._GALLERY[id]['swipe']=='left'){
+									RMC._GALLERY[RMC._RUNGALLERYID]['tdistance'] -=RMC._SW;
+									if(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']<RMC._GALLERY[id]['max']) RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']=RMC._GALLERY[id]['max'];
+								}
+								if(RMC._GALLERY[id]['swipe']=='right'){
+									RMC._GALLERY[RMC._RUNGALLERYID]['tdistance'] +=RMC._SW;
+									if(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']>0) RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']=0;
+									//alert(RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']);
+								}
+							}else{
+								//$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
+							}
+							$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
+							//barpadding=parseInt($(event.target).css('margin-left'));
+						}
+					},
+					pinchIn:function(event, direction, distance, duration, fingerCount, pinchZoom){
+						
+					},
+					pinchOut:function(event, direction, distance, duration, fingerCount, pinchZoom){
+						
+					},
+					pinchStatus:function(event, phase, direction, distance , duration , fingerCount, pinchZoom) {
+						//$(this).find('#pinch_text').text("pinched " + distance + " px ");
+						$('#rgallery_cc').css('color','#ffffff').html($.fn.swipe.phases.PHASE_END+" - "+$.fn.swipe.phases.PHASE_CANCEL+" - "+phase+" - "+direction+' - '+distance+' - '+fingerCount+' - '+pinchZoom);
+				        if(phase === $.fn.swipe.phases.PHASE_END || phase === $.fn.swipe.phases.PHASE_CANCEL) {
+				             //The handlers below fire after the status, 
+				             // so we can change the text here, and it will be replaced if the handlers below fire
+				             //$(this).find('#pinch_text').text("No pinch was made");
+				         }
+				     },
+					fingers:$.fn.swipe.fingers.ALL 
+				});*/
+				
+				
+				/* $("#rgallery").swipe( {
+				        pinchIn:function(event, direction, distance, duration, fingerCount, pinchZoom)
+				        {
+				        	$('#rgallery_cc').css('color','#fff').html("You pinched " +direction + " by " + distance +"px, zoom scale is "+pinchZoom);
+				          //$(this).text("You pinched " +direction + " by " + distance +"px, zoom scale is "+pinchZoom);
+				        },
+				        pinchOut:function(event, direction, distance, duration, fingerCount, pinchZoom)
+				        {
+				        	$('#rgallery_cc').html("You pinched " +direction + " by " + distance +"px, zoom scale is "+pinchZoom);
+				          //$(this).text("You pinched " +direction + " by " + distance +"px, zoom scale is "+pinchZoom);
+				        },
+				        pinchStatus:function(event, phase, direction, distance , duration , fingerCount, pinchZoom) {
+				        	$('#rgallery_cc').html("Pinch zoom scale "+pinchZoom+"  <br/>Distance pinched "+distance+" <br/>Direction " + direction);
+				          //$(this).html("Pinch zoom scale "+pinchZoom+"  <br/>Distance pinched "+distance+" <br/>Direction " + direction);
+				        },
+				        fingers:2,  
+				        pinchThreshold:0  
+				      });*/
+				/*$('#rgallery').swipe({swipeStatus:function(event, phase, direction, distance){
+					//$('#rgallery_cc').html(event+" - "+phase+" - "+direction+' - '+distance);
+					if(phase=='in'){
+						alert('in');
+					}
+					if(phase=='out'){
+						alert('out	');
+					}
+					
 					if(phase=="move"){
 						if(direction=='left'){
 							RMC._GALLERY[RMC._RUNGALLERYID]['distance']=distance;
@@ -652,7 +836,7 @@ var RMC={
 						$('#rgallery_div').css('-webkit-transform',' translateX('+RMC._GALLERY[RMC._RUNGALLERYID]['tdistance']+'px)');
 						//barpadding=parseInt($(event.target).css('margin-left'));
 					}
-				}, allowPageScroll:"vertical"});
+				}, allowPageScroll:"vertical"});*/
 			}
 			/*$('#rgallery').swipe({swipe:function(event, direction, distance, duration, fingerCount){
 				//alert(direction+' -- '+distance);
@@ -664,10 +848,13 @@ var RMC={
 			},threshold:0});*/
 		},
 		hideGallery:function(){
-			$('#'+RMC._BACKDEL).css('display','none');
-			RMC._BACKDEL='';
-			return false;
-		}
+			if(RMC._BACKDEL.length>0){
+				$('#'+RMC._BACKDEL[RMC._BACKDEL.length-1]).css('display','none');
+				var tmp=RMC._BACKDEL.pop();
+				if(tmp=='rgallery_big') $("#rgallery").swipe("enable");
+				return false;
+			}
+		},
 };
 //cordova 參數
 $(document).ready(function(){

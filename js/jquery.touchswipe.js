@@ -554,20 +554,21 @@
 			maximumsMap=createMaximumsData();
 			cancelMultiFingerRelease();
  
-			
+			//$('#rgallery_tt').css('color','#ffffff').html(fingerCount+' == '+getTimeStamp());
+			//$('#rgallery_tt').css('color','#ffffff').html('finger='+fingerCount+' -- '+fingerData[0].end.x+' -- '+fingerData[1].end.x+' -- '+fingerData[0].identifier+' -- '+fingerData[1].identifier+' -- <br>'+options.fingers);
 			// check the number of fingers is what we are looking for, or we are capturing pinches
 			if (!SUPPORTS_TOUCH || (fingerCount === options.fingers || options.fingers === ALL_FINGERS) || hasPinches()) {
 				// get the coordinates of the touch
 				createFingerData( 0, evt );
 				startTime = getTimeStamp();
 				
-				if(fingerCount==2) {
+				if(fingerCount==2) {//$('#rgallery_tt').css('color','#ffffff').html('cc');
 					//Keep track of the initial pinch distance, so we can calculate the diff later
 					//Store second finger data as start
 					createFingerData( 1, event.touches[1] );
 					startTouchesDistance = endTouchesDistance = calculateTouchesDistance(fingerData[0].start, fingerData[1].start);
 				}
-				
+				//$('#rgallery_tt').css('color','#fff').html(options.fingers+' <br> '+fingerCount+'<br>'+options.swipeStatus+' <br>--<br> '+options.pinchStatus);
 				if (options.swipeStatus || options.pinchStatus) {
 					ret = triggerHandler(event, phase);
 				}
@@ -863,16 +864,40 @@
 			
 			var ret = undefined;
 			
-			// SWIPE GESTURES
-			if(didSwipe() || hasSwipes()) { //hasSwipes as status needs to fire even if swipe is invalid
-				//Trigger the swipe events...
-				ret = triggerHandlerForGesture(event, phase, SWIPE);
-			} 
+			//$('#rgallery_tt').css('color','#ffffff').html(validateFingers()+' -- '+options.fingers+'<br>'+$.fn.swipe.defaults.fingers+'<br>'+'time='+getTimeStamp());
+			$('#rgallery_tt').css('color','#ffffff').html(event.touches.length);
 			
-			// PINCH GESTURES (if the above didn't cancel)
-			else if((didPinch() || hasPinches()) && ret!==false) {
-				//Trigger the pinch events...
-				ret = triggerHandlerForGesture(event, phase, PINCH);
+			//if()//event.touches.length
+			
+			//swipe and pinch
+			if(options.fingers=='all' && didPinch() && didSwipe()){
+				if(event.touches.length==1){
+					// SWIPE GESTURES
+					if(hasSwipes()) { //hasSwipes as status needs to fire even if swipe is invalid
+						//Trigger the swipe events...
+						ret = triggerHandlerForGesture(event, phase, SWIPE);
+					} 
+				}
+				if(event.touches.length>=2){
+					// PINCH GESTURES (if the above didn't cancel)
+					if((hasPinches()) && ret!==false) {
+						//Trigger the pinch events...
+						ret = triggerHandlerForGesture(event, phase, PINCH);
+					}
+				}
+			}else{
+			
+				// SWIPE GESTURES
+				if(didSwipe() || hasSwipes()) { //hasSwipes as status needs to fire even if swipe is invalid
+					//Trigger the swipe events...
+					ret = triggerHandlerForGesture(event, phase, SWIPE);
+				} 
+				
+				// PINCH GESTURES (if the above didn't cancel)
+				else if((didPinch() || hasPinches()) && ret!==false) {
+					//Trigger the pinch events...
+					ret = triggerHandlerForGesture(event, phase, PINCH);
+				}
 			}
 			
 			// CLICK / TAP (if the above didn't cancel)
@@ -1292,6 +1317,8 @@
 			var hasCorrectFingerCount = validateFingers();
 		    var hasEndPoint = validateEndPoint();
 		    var didCancel = didSwipeBackToCancel();	
+		    
+		    //$('#rgallery_tt').css('color','#ffffff').html(validateSwipeTime());
 		    
 			// if the user swiped more than the minimum length, perform the appropriate action
 			// hasValidDistance is null when no distance is set 
