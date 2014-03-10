@@ -615,7 +615,7 @@ var RMC={
 				da +='<div style="float:left;width:'+RMC._SW+'px;height:'+RMC._SH+'px;overflow:hidden;text-align:center;">'+img+'</div>';
 			}//alert(da);
 			var totalW=RMC._SW*RMC._GALLERY[id]['img'].length;//alert(totalW);
-			$('#rgallery').html('<div style="position:absolute;width:'+RMC._SW+'px;text-align:right;height:18px;"><a href="javascript:RMC.hideGallery();"><img src="css/images/b/07-2.png" border="0" style="border:#fff solid 1px;" /></a></div><div id="rgallery_div" style="width:'+totalW+'px;height:'+RMC._SH+'px;overflow:hidden;-webkit-transform:translateX('+startnum+'px);">'+da+'</div>');
+			$('#rgallery').html('<div style="position:absolute;width:'+RMC._SW+'px;text-align:right;height:18px;z-index:99;"><a href="javascript:RMC.hideGallery();"><img src="css/images/w/07.png" border="0" style="border:#fff solid 1px;margin-top:10px;margin-right:20px;padding:3px;" /></a></div><div id="rgallery_div" style="width:'+totalW+'px;height:'+RMC._SH+'px;overflow:hidden;-webkit-transform:translateX('+startnum+'px);">'+da+'</div>');
 			if(!sevent){
 				$('#rgallery').swipe({swipeStatus:function(event, phase, direction, distance){
 					if(phase=="move"){
@@ -666,6 +666,7 @@ var RMC={
 		hideGallery:function(){
 			$('#'+RMC._BACKDEL).css('display','none');
 			RMC._BACKDEL='';
+			return false;
 		}
 };
 //cordova 參數
